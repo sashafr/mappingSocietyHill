@@ -1,21 +1,22 @@
-# Mapped Bibliography
+# Mapping Society Hill
 
-**This project is actively in development. 10/3/2017**
+This project will develop a multimedia, map-based website for documenting the urban renewal of Philadelphia’s Society Hill neighborhood during the 1950s-70s. By aggregating historical photographs across time, alongside site-level data from the census, city directories, planning documents, and oral histories, the site will begin to reconstruct the reconstruction of a neighborhood.
 
+This is designed to be a simple map created using Javascript and the ArcGIS API in an html page that can be embedded into any larger website.
 
 
 ## Getting Started
 
 
-To get the code on your machine, download a copy and link to the server.  There are three files.  maptest.html is a complete copy of the code for the site in English.  map-tr.html is (or will be) the exact same thing but in Turkish.  style.css contains all the style information.  
+To add the map to your website, download both files and upload to the server hosting your current website.  `index.html` is a complete copy of the code for the map page. `shstyle.css` contains all the style information.
 
 ### Prerequisites
 
-This project uses ArcGIS API for Javascript version 4.4, as well as the accompanying stylesheet.  Current documentation available on ESRI's website is for version 4.5 but there appear to have been few changes between 4.4 and 4.5.  You should NOT use anything from version 3.22 as it is very different from 4.4.
+This project uses [ArcGIS API for Javascript version 4.4](https://developers.arcgis.com/javascript/latest/guide/release-notes/4.4/index.html), as well as the accompanying stylesheet.  Current documentation available on ESRI's website is for version 4.6 but there appear to have been few changes between 4.4 and 4.6.  You should NOT use anything from version 3.22 as it is very different from 4.4.
 
 This code gets data from a webmap in ArcGIS online, which serves as the database.  All layers should be generated in ArcGIS for Desktop as shapefiles, compressed into zip files, and loaded into a map in the user's account on AGOL.  For the map to be viewed by the public, all layers and the map itself must be made public using the sharing settings in AGOL.  Styling should also be done in AGOL.
 
-To link to a map, the webmap ID, which can be found at the end of the URL in AGOL, needs to be referenced as the portalItem when a new webmap is created (line 114).  The map's layers also need to be referenced using findLayerById (staring on line 283.  All layers that are set as visible in AGOL will appear on the map as soon as you link to the webmap as a portal item, but the individual layers must also be input.  To get the IDs of the layers, uncomment lines 277-279.  A layer's ID will contain its name in AGOL but will also contain words and/or additional numbers that aren't necessarily evident in AGOL.  
+To link to a map, the webmap ID, which can be found at the end of the URL in AGOL, needs to be referenced as the portalItem when a new webmap is created (line 114).  The map's layers also need to be referenced using findLayerById (staring on line 283).  All layers that are set as visible in AGOL will appear on the map as soon as you link to the webmap as a portal item, but the individual layers must also be input.  To get the IDs of the layers, uncomment lines 277-279.  A layer's ID will contain its name in AGOL but will also contain words and/or additional numbers that aren't necessarily evident in AGOL.  
 
 There is a limited amount of editing, such as adding features or modifying existing features, that can be done in AGOL.  Other changes such as adding fields needs to be done in ArcGIS for Desktop. You will then need to re upload the layers, which will mean they will have new IDs that need to be changed in the code.
 
@@ -29,14 +30,12 @@ Starting on line 308, the fields are defined by field name or index.  If there a
 
 The text that displays in the right sidebar, which explains a bit about the map and how to use it, can be set on line 77.
 
-map-tr.html contains a complete copy of the site in Turkish, which is a separate page.  All English words can be replaced with Turkish translations here.  A button on both sites allows you to switch back and forth.
-
 The ids of the divs that contain the browsable checkboxes in the right sidebar need to match the name of the field that will be searched for those terms.  So for example the id of the div that contains the checkboxes for title, should be the name of the field that contains the title.  When the div id is "author", the browse will search across all author fields.  
 
 
 ## Built With
 
-This site was built using ArcGIS API for Javascript version 4.4.
+[ArcGIS API for Javascript version 4.4](https://developers.arcgis.com/javascript/latest/guide/release-notes/4.4/index.html)
 
 
 ## Authors
