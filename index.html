@@ -10,41 +10,31 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="shstyle.css">
+  <link rel="stylesheet" href="shstyle.css">
 
   <script>
   require([
-    "esri/Map",
-    "esri/WebMap",
-    "esri/views/MapView",
-    "esri/layers/FeatureLayer",
-    "esri/geometry/Point",
-    "esri/geometry/Polygon",
-    "esri/geometry/Circle",
-    "esri/geometry/Polyline",
-    "esri/geometry/SpatialReference",
-    "esri/geometry/Extent",
-    "esri/Graphic",
-    "esri/Color",
-    "esri/symbols/SimpleMarkerSymbol",
-    "esri/layers/GraphicsLayer",
-    "esri/symbols/SimpleFillSymbol",
-    "esri/symbols/SimpleLineSymbol",
-    "esri/tasks/QueryTask",
-    "esri/tasks/support/Query",
-    "esri/tasks/support/StatisticDefinition",
-    "esri/geometry/geometryEngine",
-    "esri/widgets/Search",
-    "esri/widgets/Popup",
-    "esri/PopupTemplate",
-    "esri/core/watchUtils",
-    "dojo/dom",
-    "dojo/domReady!",
-    "dojo/ready"
+  "esri/Map",
+  "esri/WebMap",
+  "esri/views/MapView",
+  "esri/layers/FeatureLayer",
+  "esri/symbols/SimpleFillSymbol",
+  "esri/symbols/SimpleLineSymbol",
+  "esri/Color",
+  "esri/Graphic",
+  "esri/PopupTemplate",
+  "esri/core/watchUtils",
+  "esri/widgets/Popup",
+  "esri/geometry/geometryEngine",
+  "esri/geometry/Point",
+  "dojo/dom",
+  "dojo/domReady!",
+  "dojo/ready"
+
   ],
 
-  function(Map, WebMap, MapView, FeatureLayer, Point, Polygon, Circle, Polyline, SpatialReference, Extent, Graphic, Color, SimpleMarkerSymbol, GraphicsLayer, SimpleFillSymbol, SimpleLineSymbol, QueryTask,
-    Query, StatisticDefinition, geometryEngine, Search, Popup, PopupTemplate, watchUtils, dom){
+  function(Map, WebMap, MapView, FeatureLayer, SimpleFillSymbol, SimpleLineSymbol, Color, Graphic, PopupTemplate, watchUtils, Popup, geometryEngine, Point, dom){
+
       var map = new WebMap({
         portalItem: { // autocasts as new PortalItem()
           id: "5838281353a74323864fcbe816ee0f0e"
@@ -62,29 +52,165 @@
         return array.indexOf(value) > -1;
       }
 
+      highfillSymbol = new SimpleFillSymbol({
+     color: [255, 139, 0, 0],
+     outline: { // autocasts as new SimpleLineSymbol()
+       color: [255, 139, 0],
+       width: 2
+     }
+   });
+
+
+
+      highfillSymbol2 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_NULL,
+        new SimpleLineSymbol(
+          SimpleLineSymbol.STYLE_SHORTDASHDOTDOT,
+          new Color([255, 255, 255]),2), new Color([255, 255, 0, 0.25]));
+
+      var polylineSymbol = {
+      type: "simple-line",  // autocasts as SimpleLineSymbol()
+      color: [226, 119, 40],
+      width: 4
+    };
+
+      var layer;
+      var graphic;
+      var screenPoint;
+      var transparentHistoricLayer;
+      var graphic;
+      var recordsList;
+      var popupContent;
+      var xval;
+      var popupTemplate;
+
+  //end get Graphics
+
+
+
       view.then(function() {
+
+        function getGraphics(response) {
+          var point = new Point(screenPoint);
+          if (graphic && !response.results[0]) {
+          transparentHistoricLayer.source.remove(graphic);
+            return;
+          }
+
+          if(response.results[0] && response.results[0].graphic){
+          //  console.log(response.results[0]);
+            if (response.results[0].graphic.geometry.centroid.x == xval) {
+              return;
+            }
+
+            if (response.results[0].graphic.geometry.centroid.x != xval) {
+              transparentHistoricLayer.source.remove(graphic);
+              graphic = response.results[0].graphic.clone();
+              xval = (graphic.geometry.centroid.x);
+            }
+
+            if(response.results[0] && response.results[0].graphic){
+            //  popupContent = response.results[0].graphic.attributes["PopupContent"];
+              //var imgsrc = graphic.attributes["ImgSrc"];
+              //var name = graphic.attributes["Name"];
+            //  console.log(name);
+              //graphic.setAttribute("PopupContent", imgsrc);
+            //  console.log("image: " + graphic.attributes["PopupContent"]);
+              graphic.symbol = highfillSymbol;
+                transparentHistoricLayer.source.add(graphic);
+                console.log(transparentHistoricLayer.source.toArray()[89]);
+
+              createPopup(transparentHistoricLayer);
+            //  console.log(graphic.attributes["PopupContent"]);
+              popupTemplate2 = new PopupTemplate();
+              transparentHistoricLayer.popupTemplate = popupTemplate2;
+              popupTemplate2.title = "{Name}";
+              popupTemplate2.content = "{PopupContent}";
+              //console.log(layer.popupTemplate.title);
+
+            }
+          }
+        }
+
+
+
+
         var allLayers = map.allLayers.toArray();
         //uncomment this to get a list of all the layer ids on the map
         for (var i = 0; i < allLayers.length; i++) {
-        //  console.log(allLayers[i].id);
+         console.log(allLayers[i].id);
+         //console.log(allLayers[i].visible);
         }
 
 
 
         layerID = "allFirstParcelsGeoOh_shapefile_6643";
         layerID2 = "Archive 26_shapefile_5898";
+        layerID3 = "allFirstParcelsGeoOh_shapefile_9763";
 
-        historicLayer = map.findLayerById(layerID);
+        //historicLayer = map.findLayerById(layerID);
+        layer =  map.findLayerById(layerID);
         modernLayer = map.findLayerById(layerID2);
-        var layer = historicLayer;
+        //layer = historicLayer;
+        transparentHistoricLayer = map.findLayerById(layerID3);
+      //  console.log(transparentHistoricLayer.source.length);
+        transparentHistoricLayer.visible = false;
+        modernLayer.visible = false;
+
+
+        //alert("popup created");
 
         for (var i = 0; i < layer.fields.length; i++){
         //  console.log("field index " + i + " is " + layer.fields[i].name);
         }
 
-        modernLayer.visible = false;
 
-        var records = layer.source.toArray();
+
+
+        var checkboxes = document.getElementsByClassName("checkbox");
+        for (i = 0; i < checkboxes.length; i++) {
+          var layerName = checkboxes[i].value;
+          checkboxes[i].addEventListener("click", makeClickCallback(layerName));
+
+        }
+
+        function makeClickCallback(layerName) {
+          function callback(){
+          for (var i = 0; i < allLayers.length; i++) {
+           if (allLayers[i].id == layerName) {
+             allLayers[i].visible = !allLayers[i].visible;
+             if (layer.visible == false && modernLayer.visible == false) {
+               transparentHistoricLayer.visible = true;
+             }
+             else {
+               transparentHistoricLayer.visible = false;
+             }
+           }
+          }
+
+            //alert(checkedLayer.id);
+
+          }
+          return callback;
+        }
+
+      //  view.whenLayerView(layer).then(function(lview) {
+         watchUtils.whenTrue(view, "stationary", function() {
+        //  console.log("layer view updated");
+        view.on("pointer-move", function(evt) {
+            screenPoint = {
+             x: evt.x,
+             y: evt.y
+           };
+
+           view.hitTest(screenPoint)
+             .then( function(response){
+                 getGraphics(response);
+             });
+         }); //end pointer move
+       });
+     //});
+
+       var records = layer.source.toArray();
         var recordsList = [];
         for (var i = 0, len = records.length; i < len; i++) {
           recordsList.push(records[i]);
@@ -99,6 +225,14 @@
             imageFields.push(i);
           }
         }
+
+          createPopup(layer);
+          popupTemplate = new PopupTemplate();
+            //historicLayer.popupTemplate = popupTemplate;
+          layer.popupTemplate = popupTemplate;
+            popupTemplate.title = "{Name}";
+
+            popupTemplate.content = "{PopupContent}";
 
 
         /*  var imageFields2 = [];
@@ -139,7 +273,7 @@
 
         //toggle layer visibility
 
-        document.getElementById("toggleLayers").addEventListener('click', function(){
+      /*  document.getElementById("toggleLayers").addEventListener('click', function(){
           historicLayer.visible = !historicLayer.visible;
           modernLayer.visible = !modernLayer.visible;
           /*if (layer == layer1) {
@@ -149,8 +283,8 @@
         if (layer == layer2) {
         layer = layer1;
         return;
-      }*/
-        });
+      }
+    });*/
 
 
       //show all records when the showAll button is clicked
@@ -257,9 +391,18 @@
           }
         }//end mediaFilter
 
+        //createPopup();
 
+function createPopup(inputLayer) {
+  //alert("create popup");
 
+  var records = inputLayer.source.toArray();
+    var recordsList = [];
+    for (var i = 0, len = records.length; i < len; i++) {
+      recordsList.push(records[i]);
+    }
 
+        console.log(recordsList.length);
         for (var i = 0; i < recordsList.length; i++) {
          var popupContent = "<div style = 'display: inline-block; width:100%'>";
           //popupContent += "<div style = 'font-size:16px; width:auto; display: inline-block'><b>${Name}</b></div>";
@@ -269,6 +412,7 @@
           }
 
          var totalNumberImages = recordsList[i].attributes["NumImages"];
+         //alert("got images");
           //if there's only one image, just add it to the popup
           if (totalNumberImages == 1) {
             var firstImage = imageFields[0];
@@ -285,10 +429,10 @@
             popupContent += "<div><a href='" + recordsList[i].attributes[firstImageField] +"'><img width='450' src='" + recordsList[i].attributes[firstImageField] + "' style='position:relative'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
 
           }
-
+          //alert("firstimage");
           //if there's more than one image, put them in the format used by the Bootstrap Slideshow plugin
           if (totalNumberImages > 1) {
-            popupContent += "<div class='container' id='carouselContainer' style = 'width: 450px; margin:8px'><br>";
+            popupContent += "<div class='container' id='carouselContainer' style = 'width: 450px; margin:8px'>";
             popupContent += "<div id='myCarousel' class='carousel slide' data-ride='carousel' style = 'width: 450px; right:4%'>";
             popupContent += "<div class='carousel-inner' role='listbox'>";
             var firstImage = imageFields[0];
@@ -349,20 +493,31 @@
             popupContent += "<br/>";
             popupContent += "<b>Reuse Type:</b> " + recordsList[i].attributes["Re_Use_Typ"];
           }
+        //  alert("popup content about to be set");
           recordsList[i].setAttribute("PopupContent", popupContent);
+
+          //console.log("content set");
           //console.log(recordsList[i].attributes["PopupContent"]);
         } //end for
+      }
 
-        var popupTemplate = new PopupTemplate();
-        historicLayer.popupTemplate = popupTemplate;
+      //  popupTemplate = new PopupTemplate();
+        //historicLayer.popupTemplate = popupTemplate;
+      /*  layer.popupTemplate = popupTemplate;
         popupTemplate.title = "{Name}";
-        popupTemplate.content = "{PopupContent}";
+        popupTemplate.content = "test";*/
+      //  popupTemplate.content = "{PopupContent}";
+        //alert("template set");
+//}
 
-        /*layer.on("click", function(evt) {
+
+        //popupTemplate.content = "test";
+
+      /*  layer.on("click", function(evt) {
           var recordsList[i] = evt.graphic;
-          alert(recordsList[i]);
-          popupTemplate.title = recordsList[i].attributes["Name"];
-          popupTemplate.content = "test";
+          //alert(recordsList[i]);
+        //  popupTemplate.title = recordsList[i].attributes["Name"];
+          //popupTemplate.content = "test";
         });*/
 
         /*view.on("click", function(evt) {
@@ -386,51 +541,63 @@
 
 
     </script>
-    </head>
-    <body class="claro">
-        <div id = "pageTitle"> Preserving Society Hill </div>
-      <div id="viewDiv">
-        <div id = "collapseButton">
-						<button type="button" id = "collapse">Hide</button>
-					</div>
-					<div id = "geocoder" style = "position:relative; z-index:1000"></div>
-					<div id = "buttonDiv">
-						<input class="w3-button w3-large w3-round" style = "background-color: #d8e6cc" type="button"  id="showAll" value="Show all"/>
-						<select id="field_select" style = "background-color: #d8e6cc; height:30px" class="w3-button w3-large w3-round selector"><option value="init">(filter by reuse)</option></select>
-						<select id="media_select" style = "background-color: #d8e6cc; height:30px; width:130px" class="w3-button w3-large w3-round selector">
-							<option value="init">(filter by media)</option>
-							<option value = "photo">Photos</option>
-							<option value = "oralhist">Oral Histories</option>
-							<option value = "both">Photos and Oral Histories</option>
-						</select>
-						<!--<select id="layer_select" style = "background-color: #d8e6cc; height:30px; width:130px" class="w3-button w3-large w3-round selector">
-							<option value="historic">Historic parcels</option>
-							<option value = "modern"> Modern footprints</option>
-							<option value = "none">No layers</option>
-						</select>-->
-					</div>
-					<div id = "toggle">
-						<div class="layerText">Historic parcels</div>
-						<label class="switch" style = "vertical-align:middle">
-							<input type="checkbox">
-							<span id = "toggleLayers" class="slider">
-							</span>
-						</label>
-						<div class="layerText" >Modern building footprints</div>
-					</div>
-
+  </head>
+  <body class="claro">
+    <div id = "pageTitle"> Preserving Society Hill </div>
+    <div id="viewDiv">
+      <div id = "collapseButton">
+        <button type="button" id = "collapse">Hide</button>
       </div>
-      <div id = "sidebar">
-        <div id = "introduction">
+      <div id = "geocoder" style = "position:relative; z-index:1000"></div>
+      <div id = "buttonDiv">
+        <input class="w3-button w3-large w3-round" style = "background-color: #d8e6cc" type="button"  id="showAll" value="Show all"/>
+        <select id="field_select" style = "background-color: #d8e6cc; height:30px" class="w3-button w3-large w3-round selector"><option value="init">(filter by reuse)</option></select>
+        <select id="media_select" style = "background-color: #d8e6cc; height:30px; width:130px" class="w3-button w3-large w3-round selector">
+          <option value="init">(filter by media)</option>
+          <option value = "photo">Photos</option>
+          <option value = "oralhist">Oral Histories</option>
+          <option value = "both">Photos and Oral Histories</option>
+        </select>
+        <!--<select id="layer_select" style = "background-color: #d8e6cc; height:30px; width:130px" class="w3-button w3-large w3-round selector">
+        <option value="historic">Historic parcels</option>
+        <option value = "modern"> Modern footprints</option>
+        <option value = "none">No layers</option>
+      </select>-->
+    </div>
+    <!--<div id = "toggle">
+    <div class="layerText">Historic parcels</div>
+    <label class="switch" style = "vertical-align:middle">
+    <input type="checkbox">
+    <span id = "toggleLayers" class="slider">
+  </span>
+</label>
+<div class="layerText" >Modern building footprints</div>
+</div> -->
+
+    </div>
+    <div id = "sidebar">
+      <div id = "introduction">
         <div id = "introTitle" class = "sidebarTitle">
           Introduction
         </div>
         <div id = "introText" class = "sidebarText">
           This website displays historic photographs, oral histories and redevelopment information for properties in Philadelphia's Society Hill neighborhood.  Click on a parcel to view the associated media, or filter by reuse type or type of media.
+        </div>
       </div>
+      <div id = "layers">
+        <div id = "layerTitle" class = "sidebarTitle">
+          Layers
+        </div>
+        <div id = "layerChecklist" class = "sidebarText">
+          <form action = ''>
+            <div> <input type="checkbox" class="checkbox" value="allFirstParcelsGeoOh_shapefile_6643" checked> Historic parcels </div>
+            <div> <input type="checkbox" class = "checkbox" value="Archive 26_shapefile_5898"> Modern footprints </div>
+            <div><input type="checkbox" class = "checkbox" value="LUM1942tile_7129" checked> Historic basemap </div>
+            <div><input type="checkbox" class = "checkbox" value="World_Street_Map_3596" checked> Modern basemap </div>
+          </form>
+        </div>
       </div>
-    </div>
-      </body>
-      <script>
-      </script>
-      </html>
+    </body>
+<script>
+</script>
+</html>
