@@ -11,6 +11,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="shstyle.css">
+  <link href="lightbox/css/lightbox.css" rel="stylesheet">
 
   <script>
   require([
@@ -68,7 +69,7 @@
           new Color([255, 255, 255]),2), new Color([255, 255, 0, 0.25]));
 
       var polylineSymbol = {
-      type: "simple-line", 
+      type: "simple-line",
       color: [226, 119, 40],
       width: 4
     };
@@ -426,14 +427,14 @@ function createPopup(inputLayer) {
             if (recordsList[i].attributes[firstDateField] > 2999) {
               photoDate = "";
             }
-            popupContent += "<div><a href='" + recordsList[i].attributes[firstImageField] +"'><img width='450' src='" + recordsList[i].attributes[firstImageField] + "' style='position:relative'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
+            popupContent += "<div><a href='" + recordsList[i].attributes[firstImageField] +"' data-lightbox='shImages' data-title='Date: " + photoDate +"'><img width='200' src='" + recordsList[i].attributes[firstImageField] + "' style='position:relative'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
 
           }
           //alert("firstimage");
           //if there's more than one image, put them in the format used by the Bootstrap Slideshow plugin
           if (totalNumberImages > 1) {
-            popupContent += "<div class='container' id='carouselContainer' style = 'width: 450px; margin:8px'>";
-            popupContent += "<div id='myCarousel' class='carousel slide' data-ride='carousel' style = 'width: 450px; right:4%'>";
+            popupContent += "<div class='container' id='carouselContainer' style = 'width: 200px; margin:8px'>";
+            popupContent += "<div id='myCarousel' class='carousel slide' data-ride='carousel' style = 'width: 200px; right:4%'>";
             popupContent += "<div class='carousel-inner' role='listbox'>";
             var firstImage = imageFields[0];
             var firstImageField = layer.fields[firstImage].name;
@@ -446,7 +447,7 @@ function createPopup(inputLayer) {
             if (recordsList[i].attributes[firstDateField] > 2999) {
               photoDate = "";
             }
-            popupContent += "<div class='item active'><a href='" + recordsList[i].attributes[firstImageField] + "'><img width='450' src='" + recordsList[i].attributes[firstImageField] + "'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
+            popupContent += "<div class='item active'><a href='" + recordsList[i].attributes[firstImageField] + "'data-lightbox='shImages'data-title='Date: " + photoDate +"'><img width='200' src='" + recordsList[i].attributes[firstImageField] + "'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
             for (var j = 1; j < totalNumberImages; j++){
               var fieldindex = imageFields[j];
               var fieldname = layer.fields[fieldindex].name;
@@ -459,7 +460,7 @@ function createPopup(inputLayer) {
               if (recordsList[i].attributes[dateField] > 2999) {
                 photoDate = "";
               }
-              popupContent += "<div class='item'><a href='" + recordsList[i].attributes[fieldname] + "'><img width='450' src='" + recordsList[i].attributes[fieldname] + "'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
+              popupContent += "<div class='item'><a href='" + recordsList[i].attributes[fieldname] + "'data-lightbox='shImages' data-title='Date: " + photoDate +"'><img width='200' src='" + recordsList[i].attributes[fieldname] + "'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
             }
             popupContent += "</div>";
             popupContent += "<a class='left carousel-control' href='#myCarousel' role='button' data-slide='prev'>" +
@@ -597,6 +598,7 @@ function createPopup(inputLayer) {
           </form>
         </div>
       </div>
+      <script src="lightbox/js/lightbox-plus-jquery.js"></script>
     </body>
 <script>
 </script>
