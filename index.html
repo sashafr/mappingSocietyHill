@@ -28,13 +28,14 @@
   "esri/widgets/Popup",
   "esri/geometry/geometryEngine",
   "esri/geometry/Point",
+  "esri/renderers/SimpleRenderer",
   "dojo/dom",
   "dojo/domReady!",
   "dojo/ready"
 
   ],
 
-  function(Map, WebMap, MapView, FeatureLayer, SimpleFillSymbol, SimpleLineSymbol, Color, Graphic, PopupTemplate, watchUtils, Popup, geometryEngine, Point, dom){
+  function(Map, WebMap, MapView, FeatureLayer, SimpleFillSymbol, SimpleLineSymbol, Color, Graphic, PopupTemplate, watchUtils, Popup, geometryEngine, Point, SimpleRenderer, dom){
 
       var map = new WebMap({
         portalItem: { // autocasts as new PortalItem()
@@ -74,15 +75,32 @@
       width: 4
     };
 
+
+    visibleSymbol = new SimpleFillSymbol({
+      color: [0, 0, 0, 0],
+      outline: { // autocasts as new SimpleLineSymbol()
+        color: [56, 121, 226],
+        width: 2
+      }
+    });
+
+    invisibleSymbol = new SimpleFillSymbol({
+      color: [0, 0, 0, 0],
+      outline: { // autocasts as new SimpleLineSymbol()
+        color: [0, 0, 0, 0],
+        width: 2
+      }
+    });
+
       var layer;
       var graphic;
       var screenPoint;
-      var transparentHistoricLayer;
       var graphic;
       var recordsList;
       var popupContent;
       var xval;
       var popupTemplate;
+        var historicLayerIsVisible = true;
 
   //end get Graphics
 
@@ -93,7 +111,7 @@
         function getGraphics(response) {
           var point = new Point(screenPoint);
           if (graphic && !response.results[0]) {
-          transparentHistoricLayer.source.remove(graphic);
+          layer.source.remove(graphic);
             return;
           }
 
@@ -104,7 +122,7 @@
             }
 
             if (response.results[0].graphic.geometry.centroid.x != xval) {
-              transparentHistoricLayer.source.remove(graphic);
+              layer.source.remove(graphic);
               graphic = response.results[0].graphic.clone();
               xval = (graphic.geometry.centroid.x);
             }
@@ -117,15 +135,10 @@
               //graphic.setAttribute("PopupContent", imgsrc);
             //  console.log("image: " + graphic.attributes["PopupContent"]);
               graphic.symbol = highfillSymbol;
-                transparentHistoricLayer.source.add(graphic);
-                console.log(transparentHistoricLayer.source.toArray()[89]);
+                layer.source.add(graphic);
+                //console.log(transparentHistoricLayer.source.toArray()[89]);
 
-              createPopup(transparentHistoricLayer);
-            //  console.log(graphic.attributes["PopupContent"]);
-              popupTemplate2 = new PopupTemplate();
-              transparentHistoricLayer.popupTemplate = popupTemplate2;
-              popupTemplate2.title = "{Name}";
-              popupTemplate2.content = "{PopupContent}";
+
               //console.log(layer.popupTemplate.title);
 
             }
@@ -146,17 +159,19 @@
 
         layerID = "allFirstParcelsGeoOh_shapefile_6643";
         layerID2 = "Archive 26_shapefile_5898";
-        layerID3 = "allFirstParcelsGeoOh_shapefile_9763";
+
 
         //historicLayer = map.findLayerById(layerID);
         layer =  map.findLayerById(layerID);
         modernLayer = map.findLayerById(layerID2);
         //layer = historicLayer;
-        transparentHistoricLayer = map.findLayerById(layerID3);
-      //  console.log(transparentHistoricLayer.source.length);
-        transparentHistoricLayer.visible = false;
-        modernLayer.visible = false;
 
+      //  console.log(transparentHistoricLayer.source.length);
+
+        modernLayer.visible = false;
+        renderer = new SimpleRenderer();
+        renderer.symbol = visibleSymbol;
+        layer.renderer = renderer;
 
         //alert("popup created");
 
@@ -174,16 +189,39 @@
 
         }
 
+
+
+
+      //alert(layer.visible);
         function makeClickCallback(layerName) {
           function callback(){
           for (var i = 0; i < allLayers.length; i++) {
            if (allLayers[i].id == layerName) {
+          //   alert(layerName);
+             if (layerName != layer.id) {
              allLayers[i].visible = !allLayers[i].visible;
-             if (layer.visible == false && modernLayer.visible == false) {
-               transparentHistoricLayer.visible = true;
+           }
+             if (historicLayerIsVisible == false) {
+               //transparentHistoricLayer.visible = true;
+
+               layer.renderer = renderer;
+               if (graphic) {
+                 layer.source.remove(graphic);
+
+               }
+               historicLayerIsVisible = true;
+               return;
              }
-             else {
-               transparentHistoricLayer.visible = false;
+             if(historicLayerIsVisible == true) {
+              // alert("true");
+               //layer.visible = false;
+              // transparentHistoricLayer.visible = false;
+              var renderer3 = new SimpleRenderer();
+              renderer3.symbol = invisibleSymbol;
+              layer.renderer = renderer3;
+              historicLayerIsVisible = false;
+
+
              }
            }
           }
@@ -205,7 +243,9 @@
 
            view.hitTest(screenPoint)
              .then( function(response){
+               if (historicLayerIsVisible == false) {
                  getGraphics(response);
+               }
              });
          }); //end pointer move
        });
@@ -226,6 +266,8 @@
             imageFields.push(i);
           }
         }
+
+
 
           createPopup(layer);
           popupTemplate = new PopupTemplate();
@@ -407,23 +449,52 @@ function createPopup(inputLayer) {
       recordsList.push(records[i]);
     }
 
-        console.log(recordsList.length);
+    var numberOfImages2;
+    for (var i = 0; i < recordsList.length; i++) {
+
+      var numberOfImages2 = 0;
+      for (var j = 0; j < imageFields.length; j++) {
+        var index2 = imageFields[j];
+        var imageField2 = layer.fields[index2].name;
+        if(recordsList[i].attributes[imageField2] && recordsList[i].attributes[imageField2].length > 1) {
+          numberOfImages2++;
+        }
+      }
+      recordsList[i].setAttribute("NoImg2", numberOfImages2);
+      console.log(i + " " + recordsList[i].attributes["NoImg2"]);
+    }
+
+        //console.log(recordsList.length);
         for (var i = 0; i < recordsList.length; i++) {
          var popupContent = "<div style = 'display: inline-block; width:100%'>";
+         //popupContent += recordsList[i].attributes["NoImg2"];
           //popupContent += "<div style = 'font-size:16px; width:auto; display: inline-block'><b>${Name}</b></div>";
           if  (recordsList[i].attributes["Narrator"] && recordsList[i].attributes["Narrator"].length > 1) {
             popupContent += "<div style = 'float:right; width:auto; display: inline-block'><img width = '20' src = 'http://www.clker.com/cliparts/6/g/n/Z/Y/V/head-outline-hi.png'></div></div>";
             popupContent += "<div style = 'float:right; width:auto; margin: 4px'><a href = '#'> Oral History: " + recordsList[i].attributes["Narrator"] + "</a></div>";
           }
 
-         var totalNumberImages = recordsList[i].attributes["NumImages"];
-         //alert("got images");
+
+         var totalNumberImages = recordsList[i].attributes["NoImg2"];
+         //alert(totalNumberImages);
           //if there's only one image, just add it to the popup
           if (totalNumberImages == 1) {
-            var firstImage = imageFields[0];
-            var firstImageField = layer.fields[firstImage].name;
-            var firstDate = imageFields[0] + 1;
+            //alert(totalNumberImages);
+            var singleImageIndex;
+            for (j = 0; j < imageFields.length; j++) {
+              var index2 = imageFields[j];
+              var imageField2 = layer.fields[index2].name;
+              if(recordsList[i].attributes[imageField2] && recordsList[i].attributes[imageField2].length > 1) {
+                singleImageIndex = imageFields[j];
+              }
+            }
+            //alert("single image index: " + singleImageIndex);
+            //var firstImage = imageFields[singleImageIndex];
+            var firstImageField = layer.fields[singleImageIndex].name;
+            //popupContent += singleImageIndex;
+            var firstDate = singleImageIndex + 1;
             var firstDateField = layer.fields[firstDate].name;
+            //alert(firstDateField);
             var photoDate;
             if (recordsList[i].attributes[firstDateField] < 2999) {
               photoDate = recordsList[i].attributes[firstDateField];
@@ -437,12 +508,35 @@ function createPopup(inputLayer) {
           //alert("firstimage");
           //if there's more than one image, put them in the format used by the Bootstrap Slideshow plugin
           if (totalNumberImages > 1) {
+            //popupContent += "more than one";
             popupContent += "<div class='container' id='carouselContainer' style = 'width: 200px; margin:8px'>";
             popupContent += "<div id='myCarousel' class='carousel slide' data-ride='carousel' style = 'width: 200px; right:4%'>";
             popupContent += "<div class='carousel-inner' role='listbox'>";
-            var firstImage = imageFields[0];
+
+            var firstImageIndex = 0;
+            var len = imageFields.length;
+
+            for (j = 0; j < imageFields.length; j++) {
+              var index2 = imageFields[j];
+              //popupContent += index2;
+              var imageField2 = layer.fields[index2].name;
+              //alert(imageField2);
+              if(firstImageIndex == 0 && recordsList[i].attributes[imageField2] && recordsList[i].attributes[imageField2].length > 1) {
+                firstImageIndex = imageFields[j];
+                //popupContent += firstImageIndex;
+
+              }
+            }
+            //alert(firstImageIndex);
+            //popupContent+= firstImageIndex;
+            /*var firstImageField = layer.fields[singleImageIndex].name;
+            popupContent += singleImageIndex;
+            var firstDate = singleImageIndex + 1;
+            var firstDateField = layer.fields[firstDate].name;*/
+
+            var firstImage = firstImageIndex;
             var firstImageField = layer.fields[firstImage].name;
-            var firstDate = imageFields[0] + 1;
+            var firstDate = firstImageIndex + 1;
             var firstDateField = layer.fields[firstDate].name;
             var photoDate;
             if (recordsList[i].attributes[firstDateField] < 2999) {
@@ -452,7 +546,40 @@ function createPopup(inputLayer) {
               photoDate = "";
             }
             popupContent += "<div class='item active'><a href='" + recordsList[i].attributes[firstImageField] + "'data-lightbox='shImages'data-title='Date: " + photoDate +"'><img width='200' src='" + recordsList[i].attributes[firstImageField] + "'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
-            for (var j = 1; j < totalNumberImages; j++){
+            //popupContent += "firstImage " + firstImageIndex;
+            var len = imageFields.length;
+            //popupContent += len;
+
+            for (k = firstImageIndex + 1; k < layer.fields.length; k++) {
+            //  popupContent += "k " + k;
+              if (isInArray(k, imageFields)) {
+              var imageField = k;
+              var field = layer.fields[imageField].name;
+              //popupContent += field;
+              //popupContent += "</br>";
+              var image = recordsList[i].attributes[field];
+            //  popupContent += image;
+              if (image && image.length > 1) {
+                var dateFieldIndex = imageField + 1;
+                var dateField = layer.fields[dateFieldIndex].name;
+                var photoDate;
+                if (recordsList[i].attributes[dateField] < 2999) {
+                  photoDate = recordsList[i].attributes[dateField];
+                }
+                if (recordsList[i].attributes[dateField] > 2999) {
+                  photoDate = "";
+                }
+                popupContent += "<div class='item'><a href='" + image + "'data-lightbox='shImages' data-title='Date: " + photoDate +"'><img width='200' src='" + image + "'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
+
+}
+              }
+
+            }
+
+
+
+
+            /*for (var j = 1; j < totalNumberImages; j++){
               var fieldindex = imageFields[j];
               var fieldname = layer.fields[fieldindex].name;
               var dateFieldIndex = fieldindex + 1;
@@ -465,7 +592,7 @@ function createPopup(inputLayer) {
                 photoDate = "";
               }
               popupContent += "<div class='item'><a href='" + recordsList[i].attributes[fieldname] + "'data-lightbox='shImages' data-title='Date: " + photoDate +"'><img width='200' src='" + recordsList[i].attributes[fieldname] + "'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
-            }
+            }*/
             popupContent += "</div>";
             popupContent += "<a class='left carousel-control' href='#myCarousel' role='button' data-slide='prev'>" +
             "<span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span>" +
@@ -476,8 +603,9 @@ function createPopup(inputLayer) {
             "<span class='sr-only'>Next</span>" +
             "</a>" +
             "</div>";
-            popupContent += "</div>";
           }
+            popupContent += "</div>";
+
           if (recordsList[i].attributes["Hist__Cert"] != " " || recordsList[i].attributes["Re_Use_Ful"].length > 1 || recordsList[i].attributes["Re_Use_Typ"].length > 1){
             popupContent += "<br/>";
             popupContent += "<div style = 'border-bottom: 1px solid white; font-size: 16px'> ADDITIONAL DATA </div>";
@@ -504,7 +632,8 @@ function createPopup(inputLayer) {
           //console.log("content set");
           //console.log(recordsList[i].attributes["PopupContent"]);
         } //end for
-      }
+
+    }
 
       //  popupTemplate = new PopupTemplate();
         //historicLayer.popupTemplate = popupTemplate;
