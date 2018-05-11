@@ -1,3 +1,5 @@
+/* basic page setup */
+
 #viewDiv{
   width:98%;
   height:91%;
@@ -6,14 +8,12 @@
   display: inline-flex;
   float: left;
   left: 1%;
-
 }
 
 #biggestDiv{
   display: inline-flex;
   float:left;
   width: 100%;
-
 }
 
 #pageTitle {
@@ -24,11 +24,11 @@
   color: #4b845a;
 }
 
+/*the sidebar */
+
 #sidebar {
   height:91%;
   width:26%;
-
-
 }
 
 #innerSidebar {
@@ -55,17 +55,14 @@
 
 .checkbox {
   display: inline-block
-
 }
 
 #collapseButton {
   float:left;
   width: 50px;
   position: absolute;
-
   left:26%;
   display:inline-flex;
-
 }
 
 #collapse {
@@ -73,7 +70,7 @@
   background-color: rgb(119, 119, 119);
   color:rgb(192, 192, 192);
   border:none;
-   font-weight:bold;
+  font-weight:bold;
   text-transform:uppercase;
   font-size: 0.9em;
   display:inline-flex;
@@ -84,154 +81,66 @@
 #buttonDiv {
   outline: none;
   float: left;
-    display: inline-flex;
-    position: absolute;
   left: 35%;
   z-index: 0;
-
 }
 
-#toggle {
-
-    z-index: 0;
-    width: 200px;
-    height: 48px;
-    float: right;
-    left: 60%;
-    /* display: none; */
-    background: #d8e6cc;
-    margin: 4px;
-    padding: 4px;
-    padding-left: 8px;
-    border: .5px solid black;
-    font-size: 12px;
-}
 
 #showAll {
   height:30px;
 }
 
-.esri-popup__main-container {
-width:250px;
-max-height:700px;
-overflow-y:hidden;
 
+/* the location of the zoom and geocoder widget */
+.esri-ui-top-left {
+  left: 98.5%;
+  top: 6%;
 }
 
+/* Esri classes associated with the popups
+Note: There are many of these classes and they are very confusing.  The classes
+change depending on the size of the browser's window. Much of the styling that controls
+the size of the popup is done inline when the popup is created
+  */
+.esri-popup__main-container {
+  width:267px;
+  max-height:700px;
+}
 
+.esri-popup-renderer__main-container{
+  width:267px;
+}
 
 .esri-view-height-less-than-medium {
-max-height: 100%;
-width: 250px;
-
+  max-height: 100%;
+  width: 267px;
 }
 
 .esri-view-root {
-width:100%;
-height:100%;
+  width:100%;
+  height:100%;
 }
 
 .esri-view-height-less-than-medium .esri-popup__main-container {
   max-height: 520px;
-  width: 250px;
+  width: 267px;
   z-index:100;
-  /*overflow-y: scroll*/
   overflow-x:hidden;
 }
 
 .esri-popup__header {
-  width:250px;
-
+  width:100%
 }
 
 .esri-popup__header-title{
-padding-right: 0px;
+  padding-right: 0px;
 }
 
 
-.esri-zoom {
-  bottom: 70%;
-    position: fixed;
-
-}
-.layerText {
-  /*word-wrap:break-word;*/
-  /*word-break:break-word;*/
-  width:55px;
-  line-height:12px;
-  position:relative;
-  display: inline-block;
-  vertical-align: middle;
-  font-weight: bold;
-}
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+.esri-view-width-xlarge .esri-popup__main-container{
+  width:267px;
 }
 
-.switch input {display:none;}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
-
-.esri-component .esri-zoom .esri-widget {
-  float:left;
-left:95%;
-}
-
-.esri-ui-top-left {
-  float: left;
-  left: 95%;
-  display: inline-flex;
-  position: absolute;
-  height: 50px;
-  top: -5px;
-}
-
-.esri-ui-top-left .esri-ui-corner {
-  float:left;
-  left:95%;
-
-}
-
-.esri-zoom {
-position:absolute;
-bottom: -38%;
+.esri-view-height-large .esri-popup__main-container {
+  max-height: 100%;
 }
