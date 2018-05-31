@@ -1,146 +1,114 @@
 /* basic page setup */
 
 #viewDiv{
-  width:98%;
-  height:91%;
-  border: 2px solid #4b845a;
-  position: absolute;
-  display: inline-flex;
-  float: left;
-  left: 1%;
+    width:98%;
+    height:91%;
+    border: 2px solid #4b845a;
+    position: absolute;
+    display: inline-flex;
+    float: left;
+    left: 1%;
 }
 
 #biggestDiv{
-  display: inline-flex;
-  float:left;
-  width: 100%;
+    display: inline-flex;
+    float:left;
+    width: 100%;
+    height: 100%;
 }
 
 #pageTitle {
-  width:100%;
-  padding: 10px;
-  font-size: 30px;
-  text-align: center;
-  color: #4b845a;
+    width:100%;
+    padding: 10px;
+    font-size: 30px;
+    text-align: center;
+    color: #4b845a;
 }
 
 /*the sidebar */
 
 #sidebar {
-  height:91%;
-  width:26%;
+    height:91%;
+    width:26%;
 }
 
 #innerSidebar {
-  border: 2px solid #4b845a;
-  position:relative;
-  font-family: Arial;
-  font-size: 14px;
-  overflow-y: scroll;
-  background-color: white;
-  height:100%;
-  left:1%;
+    border: 2px solid #4b845a;
+    position:relative;
+    font-family: Arial;
+    font-size: 14px;
+    overflow-y: scroll;
+    background-color: white;
+    height:100%;
+    left:1%;
 }
 
 .sidebarTitle {
-  font-size: 20px;
-  margin: 6px;
-  border-bottom: 1px solid black;
+    font-size: 20px;
+    margin: 6px;
+    border-bottom: 1px solid black;
 }
 
 .sidebarText {
-  margin-left: 10px;
-  margin-right: 6px;
+    margin-left: 10px;
+    margin-right: 6px;
 }
 
 .checkbox {
-  display: inline-block
+    display: inline-block
 }
 
 #collapseButton {
-  float:left;
-  width: 50px;
-  position: absolute;
-  left:26%;
-  display:inline-flex;
+    float:left;
+    width: 50px;
+    position: absolute;
+    left:26%;
+    display:inline-flex;
 }
 
 #collapse {
-  position: absolute;
-  background-color: rgb(119, 119, 119);
-  color:rgb(192, 192, 192);
-  border:none;
-  font-weight:bold;
-  text-transform:uppercase;
-  font-size: 0.9em;
-  display:inline-flex;
-  float:left;
-  padding:6px;
+    position: absolute;
+    background-color: rgb(119, 119, 119);
+    color:rgb(192, 192, 192);
+    border:none;
+    font-weight:bold;
+    text-transform:uppercase;
+    font-size: 0.9em;
+    display:inline-flex;
+    float:left;
+    padding:6px;
 }
 
 #buttonDiv {
-  outline: none;
-  float: left;
-  left: 35%;
-  z-index: 0;
+    outline: none;
+    float: left;
+    left: 35%;
+    z-index: 0;
 }
 
 
 #showAll {
-  height:30px;
+    height:30px;
 }
 
+.filterMenu {
+    margin: 6px;
+    padding: 0;
+}
+
+.filterMenu li {
+    list-style: none;
+    margin: 6px 0 6px 0;
+}
 
 /* the location of the zoom and geocoder widget */
 .esri-ui-top-left {
-  left: 98.5%;
-  top: 6%;
+    left: 98.5%;
+    top: 6%;
 }
 
 /* Esri classes associated with the popups
 Note: There are many of these classes and they are very confusing.  The classes
 change depending on the size of the browser's window. Much of the styling that controls
 the size of the popup is done inline when the popup is created
-  */
-.esri-popup__main-container {
-  width:267px;
-  max-height:700px;
-}
-
-.esri-popup-renderer__main-container{
-  width:267px;
-}
-
-.esri-view-height-less-than-medium {
-  max-height: 100%;
-  width: 267px;
-}
-
-.esri-view-root {
-  width:100%;
-  height:100%;
-}
-
-.esri-view-height-less-than-medium .esri-popup__main-container {
-  max-height: 520px;
-  width: 267px;
-  z-index:100;
-  overflow-x:hidden;
-}
-
-.esri-popup__header {
-  width:100%
-}
-
-.esri-popup__header-title{
-  padding-right: 0px;
-}
-
-
-.esri-view-width-xlarge .esri-popup__main-container{
-  width:267px;
-}
-
-.esri-view-height-large .esri-popup__main-container {
-  max-height: 100%;
-}
+*/

@@ -1,742 +1,753 @@
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title></title>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.4/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.4/"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="shstyle.css">
-  <link href="lightbox/css/lightbox.css" rel="stylesheet">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title></title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.4/esri/css/main.css">
+    <script src="https://js.arcgis.com/4.4/"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="shstyle.css">
+    <link href="lightbox/css/lightbox.css" rel="stylesheet">
 
-  <script>
-  require([
-    "esri/Map",
-    "esri/WebMap",
-    "esri/views/MapView",
-    "esri/layers/FeatureLayer",
-    "esri/symbols/SimpleFillSymbol",
-    "esri/symbols/SimpleLineSymbol",
-    "esri/Color",
-    "esri/Graphic",
-    "esri/PopupTemplate",
-    "esri/core/watchUtils",
-    "esri/widgets/Popup",
-    "esri/geometry/geometryEngine",
-    "esri/geometry/Point",
-    "esri/renderers/SimpleRenderer",
-    "esri/widgets/Search",
-    "dojo/dom",
-    "dojo/domReady!",
-    "dojo/ready"
+    <script>
+    require([
+        "esri/Map",
+        "esri/WebMap",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/symbols/SimpleFillSymbol",
+        "esri/symbols/SimpleLineSymbol",
+        "esri/Color",
+        "esri/Graphic",
+        "esri/PopupTemplate",
+        "esri/core/watchUtils",
+        "esri/widgets/Popup",
+        "esri/geometry/geometryEngine",
+        "esri/geometry/Point",
+        "esri/renderers/SimpleRenderer",
+        "esri/widgets/Search",
+        "dojo/dom",
+        "dojo/domReady!",
+        "dojo/ready"
 
-  ],
+    ],
 
-  function(Map, WebMap, MapView, FeatureLayer, SimpleFillSymbol, SimpleLineSymbol, Color, Graphic, PopupTemplate, watchUtils, Popup, geometryEngine, Point, SimpleRenderer, Search, dom){
+    function(Map, WebMap, MapView, FeatureLayer, SimpleFillSymbol, SimpleLineSymbol, Color, Graphic, PopupTemplate, watchUtils, Popup, geometryEngine, Point, SimpleRenderer, Search, dom){
 
-    var map = new WebMap({
-      portalItem: { // autocasts as new PortalItem()
-        id: "5838281353a74323864fcbe816ee0f0e"
-      }
-    })
+        var map = new WebMap({
+            portalItem: { // autocasts as new PortalItem()
+                id: "5838281353a74323864fcbe816ee0f0e"
+            }
+        })
 
-    var view = new MapView({
-      container: "viewDiv",  // Reference to the scene div created in step 5
-      map: map,  // Reference to the map object created before the scene
-      zoom: 16,  // Sets zoom level based on level of detail (LOD)
-      center: [-75.1482, 39.94581]  // Sets center point of view using longitude,latitude
-    });
-
-    var searchWidget = new Search({
-      view: view,
-      resultGraphicEnabled: false,
-      popupEnabled: false,
-      popupOpenOnSelect: false,
-    });
-
-    view.ui.add(searchWidget, {
-      position: "top-right",
-      index: 2
-    });
-
-
-    function isInArray(value, array) {
-      return array.indexOf(value) > -1;
-    }
-
-    highfillSymbol = new SimpleFillSymbol({
-      color: [255, 139, 0, 0],
-      outline: { // autocasts as new SimpleLineSymbol()
-        color: [255, 139, 0],
-        width: 2
-      }
-    });
-
-
-
-    highfillSymbol2 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_NULL,
-      new SimpleLineSymbol(
-        SimpleLineSymbol.STYLE_SHORTDASHDOTDOT,
-        new Color([255, 255, 255]),2), new Color([255, 255, 0, 0.25]));
-
-        var polylineSymbol = {
-          type: "simple-line",
-          color: [226, 119, 40],
-          width: 4
-        };
-
-        visibleSymbol = new SimpleFillSymbol({
-          color: [0, 0, 0, 0],
-          outline: { // autocasts as new SimpleLineSymbol()
-            color: [56, 121, 226],
-            width: 2
-          }
+        var view = new MapView({
+            container: "viewDiv",  // Reference to the scene div created in step 5
+            map: map,  // Reference to the map object created before the scene
+            zoom: 16,  // Sets zoom level based on level of detail (LOD)
+            center: [-75.1482, 39.94581]  // Sets center point of view using longitude,latitude
         });
 
-        invisibleSymbol = new SimpleFillSymbol({
-          color: [0, 0, 0, 0],
-          outline: { // autocasts as new SimpleLineSymbol()
-            color: [0, 0, 0, 0],
-            width: 2
-          }
+        var searchWidget = new Search({
+            view: view,
+            resultGraphicEnabled: false,
+            popupEnabled: false,
+            popupOpenOnSelect: false,
         });
 
-        var layer;
-        var graphic;
-        var screenPoint;
-        var graphic;
-        var recordsList;
-        var popupContent;
-        var xval;
-        var popupTemplate;
-        var historicLayerIsVisible = true;
-        var modernBasemap;
-        var historicBasemap;
+        view.ui.add(searchWidget, {
+            position: "top-right",
+            index: 2
+        });
 
-        //BEGIN VIEW.THEN--THE MAP'S LAYERS ARE ONLY DEFININED WITHIN THIS
-        view.then(function() {
-          function getGraphics(response) {
-            //have parcels appear and disappear as the user mouses over; activated when the parcels layer is hidden
-            var point = new Point(screenPoint);
-            //remove the graphic when the user's mouse is not on a feature
-            if (graphic && !response.results[0]) {
-              layer.source.remove(graphic);
-              return;
+
+        function isInArray(value, array) {
+            return array.indexOf(value) > -1;
+        }
+
+        highfillSymbol = new SimpleFillSymbol({
+            color: [255, 139, 0, 0],
+            outline: { // autocasts as new SimpleLineSymbol()
+                color: [255, 139, 0],
+                width: 2
             }
-            //if the user's mouse is on a feature and there's already a graphic
-            if(response.results[0] && response.results[0].graphic){
-              //if the new mouse location is inside the feature that's already being displayed, do nothing
-              if (response.results[0].graphic.geometry.centroid.x == xval) {
-                return;
-              }
-              //if the new mouse location is on a different feature, get rid of the old graphic and replace it with a new one
-              //that is a clone of parcel it represents
-              if (response.results[0].graphic.geometry.centroid.x != xval) {
-                layer.source.remove(graphic);
-                graphic = response.results[0].graphic.clone();
-                xval = (graphic.geometry.centroid.x);
-              }
-              //if a graphic has been created, symbolize it and add it
-              if(response.results[0] && response.results[0].graphic){
-                graphic.symbol = highfillSymbol;
-                layer.source.add(graphic);
-              }
-            }
-          }
-
-          var allLayers = map.allLayers.toArray();
-          //uncomment this to get a list of all the layer ids on the map
-          for (var i = 0; i < allLayers.length; i++) {
-            console.log(allLayers[i].id);
-          }
-
-          //CONFIGURABLE VARIABLES
-          listOfLayerIds = ["UpdatedParcelsPart1_shapefile_575", "UpdatedParcelsPart2_shapefile_7108"]; //parcels without data
-          var parcelsWithoutDataIDs = ["ParcelsWithoutPts_shapefile_7091"];
-          historicBasemap = "LUM1942tile_7129";
-          modernBasemap = "World_Street_Map_3596";
-          var spreadSheetFields = ["RenewAct", "ReUseType", "DateBuilt", "Architect", "OrigOwner", "Alt1Date", "Alt1Arch", "Alt1", "Alt2Date", "Alt2Arch", "Alt2","Alt3Date", "Alt3Arch", "Alt3",
-          "Alt4Date", "Alt4Arch", "Alt4", "Alt5Date", "Alt5Arch", "Alt5", "Alt6Date", "Alt6Arch", "Alt6"]
-          var spreadSheetFieldsAliases = ["Renewal action", "Reuse Type", "Date Built", "Architect/Builder", "Original Owner",  "Alteration 1 Date", "Alteration 1 Architect", "Alteration 1",
-          "Alteration 2 Date", "Alteration 2 Architect", "Alteration 2", "Alteration 3 Date", "Alteration 3 Architect", "Alteration 3", "Alteration 4 Date", "Alteration 4 Architect", "Alteration 4",
-          "Alteration 5 Date", "Alteration 5 Architect", "Alteration 5", "Alteration 6 Date", "Alteration 6 Architect", "Alteration 6"]
-          var descriptionFields = ["Descript1", "Descript2", "Descript3", "Descript4", "Descript5", "Descript6", "Descript7"];
-          //get all the layers with and without data
-          var parcelsWithoutData = [];
-          var titleField = "Address";
+        });
 
 
-          for (var i = 0; i < parcelsWithoutDataIDs.length; i++) {
-            var parcel = map.findLayerById(parcelsWithoutDataIDs[i]);
-            parcelsWithoutData.push(parcel);
-          }
-          var listOfLayers = [];
-          var listOfAllRecords = [];
-          for (var i = 0; i < listOfLayerIds.length; i++) {
-            id = listOfLayerIds[i];
-            layer = map.findLayerById(id);
-            listOfLayers.push(layer);
-            allRecords = layer.source.toArray();
-            listOfAllRecords.push(allRecords);
-          }
 
-          //create a renderer to symbolize the layer
-          renderer = new SimpleRenderer();
-          renderer.symbol = visibleSymbol;
-          for (var i = 0; i < listOfLayers.length; i++) {
-            layer = listOfLayers[i];
-            layer.renderer = renderer;
-          }
+        highfillSymbol2 = new SimpleFillSymbol(SimpleFillSymbol.STYLE_NULL,
+            new SimpleLineSymbol(
+                SimpleLineSymbol.STYLE_SHORTDASHDOTDOT,
+                new Color([255, 255, 255]),2), new Color([255, 255, 0, 0.25]));
 
-          for (var i = 0; i < layer.fields.length; i++){
-            //console.log("field index " + i + " is " + layer.fields[i].name);
-          }
+                var polylineSymbol = {
+                    type: "simple-line",
+                    color: [226, 119, 40],
+                    width: 4
+                };
 
-          var layerName;
-          //attach click listeners to the checkboxes to turn layers on and off
-          var checkboxes = document.getElementsByClassName("checkbox");
-          for (i = 0; i < checkboxes.length; i++) {
-            layerName = checkboxes[i].value;
-            checkboxes[i].addEventListener("click", makeClickCallback(layerName));
-          }
+                visibleSymbol = new SimpleFillSymbol({
+                    color: [0, 0, 0, 0],
+                    outline: { // autocasts as new SimpleLineSymbol()
+                        color: [56, 121, 226],
+                        width: 2
+                    }
+                });
 
-          //toggle layers on and off
-          //note: the layers without data and basemaps are turned off when the box is clicked (their visibility
-          //is set to false).  the layers with the data are not turned off; rather, they are assigned a new renderer
-          //that makes them transparent, but their visibility is still true so that you can click on them and create the graphic
-          function makeClickCallback(layerName) {
-            function callback(){
-              if (layerName == "parcels"){
-                //if the parcels layer is transparent, assign it the default renderer that will make it visible again
-                if (historicLayerIsVisible == false) {
-                  for (var i = 0; i < listOfLayers.length; i++) {
-                    layer = listOfLayers[i];
-                    layer.renderer = renderer;
-                  }
-                  //remove any extra graphics
-                  if (graphic) {
-                    for (var i = 0; i < listOfLayers.length; i++) {
-                      layer = listOfLayers[i];
-                      layer.source.remove(graphic);
+                invisibleSymbol = new SimpleFillSymbol({
+                    color: [0, 0, 0, 0],
+                    outline: { // autocasts as new SimpleLineSymbol()
+                        color: [0, 0, 0, 0],
+                        width: 2
+                    }
+                });
+
+                var layer;
+                var graphic;
+                var screenPoint;
+                var graphic;
+                var recordsList;
+                var popupContent;
+                var xval;
+                var popupTemplate;
+                var historicLayerIsVisible = true;
+                var modernBasemap;
+                var historicBasemap;
+
+                //BEGIN VIEW.THEN--THE MAP'S LAYERS ARE ONLY DEFININED WITHIN THIS
+                view.then(function() {
+                    function getGraphics(response) {
+                        //have parcels appear and disappear as the user mouses over; activated when the parcels layer is hidden
+                        var point = new Point(screenPoint);
+                        //remove the graphic when the user's mouse is not on a feature
+                        if (graphic && !response.results[0]) {
+                            layer.source.remove(graphic);
+                            return;
+                        }
+                        //if the user's mouse is on a feature and there's already a graphic
+                        if(response.results[0] && response.results[0].graphic){
+                            //if the new mouse location is inside the feature that's already being displayed, do nothing
+                            if (response.results[0].graphic.geometry.centroid.x == xval) {
+                                return;
+                            }
+                            //if the new mouse location is on a different feature, get rid of the old graphic and replace it with a new one
+                            //that is a clone of parcel it represents
+                            if (response.results[0].graphic.geometry.centroid.x != xval) {
+                                layer.source.remove(graphic);
+                                graphic = response.results[0].graphic.clone();
+                                xval = (graphic.geometry.centroid.x);
+                            }
+                            //if a graphic has been created, symbolize it and add it
+                            if(response.results[0] && response.results[0].graphic){
+                                graphic.symbol = highfillSymbol;
+                                layer.source.add(graphic);
+                            }
+                        }
                     }
 
-                  }
-                  historicLayerIsVisible = true;
-                  for (var i = 0; i < parcelsWithoutData.length; i++) {
-                    parcelsWithoutData[i].visible = historicLayerIsVisible;
-                  }
-                  return;
-                }
+                    var allLayers = map.allLayers.toArray();
+                    //uncomment this to get a list of all the layer ids on the map
+                    for (var i = 0; i < allLayers.length; i++) {
+                        console.log(allLayers[i].id);
+                    }
 
-                if(historicLayerIsVisible == true) {
-                  //assign the parcels with data a new renderer that makes them transparent
-                  var renderer3 = new SimpleRenderer();
-                  renderer3.symbol = invisibleSymbol;
-                  for (var i = 0; i < listOfLayers.length; i++) {
-                    layer = listOfLayers[i];
-                    layer.renderer = renderer3;
-                  }
-                  historicLayerIsVisible = false;
-                }
-                for (var i = 0; i < parcelsWithoutData.length; i++) {
-                  parcelsWithoutData[i].visible = historicLayerIsVisible;
-                }
-              }
-
-              if (layerName == "historic basemap") {
-                for (var j = 0; j < allLayers.length; j++) {
-                  if (allLayers[j].id == historicBasemap) {
-                    allLayers[j].visible = !allLayers[j].visible;
-                  }
-                }
-              }
-
-              if (layerName == "modern basemap") {
-                for (var j = 0; j < allLayers.length; j++) {
-                  if (allLayers[j].id == modernBasemap) {
-                    allLayers[j].visible = !allLayers[j].visible;
-                  }
-                }
-              }
-            }
-            return callback;
-          }
+                    //CONFIGURABLE VARIABLES
+                    listOfLayerIds = ["UpdatedParcelsPart1_shapefile_575", "UpdatedParcelsPart2_shapefile_7108"]; //parcels without data
+                    var parcelsWithoutDataIDs = ["ParcelsWithoutPts_shapefile_7091"];
+                    historicBasemap = "LUM1942tile_7129";
+                    modernBasemap = "World_Street_Map_3596";
+                    var spreadSheetFields = ["RenewAct", "ReUseType", "DateBuilt", "Architect", "OrigOwner", "Alt1Date", "Alt1Arch", "Alt1", "Alt2Date", "Alt2Arch", "Alt2","Alt3Date", "Alt3Arch", "Alt3",
+                    "Alt4Date", "Alt4Arch", "Alt4", "Alt5Date", "Alt5Arch", "Alt5", "Alt6Date", "Alt6Arch", "Alt6"]
+                    var spreadSheetFieldsAliases = ["Renewal action", "Reuse Type", "Date Built", "Architect/Builder", "Original Owner",  "Alteration 1 Date", "Alteration 1 Architect", "Alteration 1",
+                    "Alteration 2 Date", "Alteration 2 Architect", "Alteration 2", "Alteration 3 Date", "Alteration 3 Architect", "Alteration 3", "Alteration 4 Date", "Alteration 4 Architect", "Alteration 4",
+                    "Alteration 5 Date", "Alteration 5 Architect", "Alteration 5", "Alteration 6 Date", "Alteration 6 Architect", "Alteration 6"]
+                    var descriptionFields = ["Descript1", "Descript2", "Descript3", "Descript4", "Descript5", "Descript6", "Descript7"];
+                    //get all the layers with and without data
+                    var parcelsWithoutData = [];
+                    var titleField = "Address";
 
 
-          watchUtils.whenTrue(view, "stationary", function() {
-            view.on("pointer-move", function(evt) {
-              screenPoint = {
-                x: evt.x,
-                y: evt.y
-              };
-              //register when the user's mouse is over a feature
-              view.hitTest(screenPoint)
-              .then( function(response){
-                //if the historic layer is transparent, create graphics when the user mouses over a feature
-                if (historicLayerIsVisible == false) {
-                  getGraphics(response);
-                }
-              });
-            }); //end pointer move
-          });
+                    for (var i = 0; i < parcelsWithoutDataIDs.length; i++) {
+                        var parcel = map.findLayerById(parcelsWithoutDataIDs[i]);
+                        parcelsWithoutData.push(parcel);
+                    }
+                    var listOfLayers = [];
+                    var listOfAllRecords = [];
+                    for (var i = 0; i < listOfLayerIds.length; i++) {
+                        id = listOfLayerIds[i];
+                        layer = map.findLayerById(id);
+                        listOfLayers.push(layer);
+                        allRecords = layer.source.toArray();
+                        listOfAllRecords.push(allRecords);
+                    }
 
-          var recordsList = [];
-          for (var i = 0; i < listOfLayers.length; i++) {
-            layer = listOfLayers[i];
-            var records = layer.source.toArray();
-            for (var j = 0, len = records.length; j < len; j++) {
-              recordsList.push(records[j]);
-            }
-          }
+                    //create a renderer to symbolize the layer
+                    renderer = new SimpleRenderer();
+                    renderer.symbol = visibleSymbol;
+                    for (var i = 0; i < listOfLayers.length; i++) {
+                        layer = listOfLayers[i];
+                        layer.renderer = renderer;
+                    }
 
-          //put all the image field indexes in an array
-          var imageFields = [];
-          for (var i = 0; i < layer.fields.length; i++){
-            var fieldName = layer.fields[i].name;
-            var substring = "ImgSrc";
-            if (fieldName.indexOf(substring) !== -1) {
-              imageFields.push(i);
-            }
-          }
+                    for (var i = 0; i < layer.fields.length; i++){
+                        //console.log("field index " + i + " is " + layer.fields[i].name);
+                    }
 
-          //set the popup's content to be the field PopupContent which is created
-          //by the createPopup function
-          for (var i = 0; i < listOfLayers.length; i++) {
-            layer = listOfLayers[i];
-            createPopup(layer);
-            popupTemplate = new PopupTemplate();
-            layer.popupTemplate = popupTemplate;
-            popupTemplate.title = "{" + titleField + "}";
-            popupTemplate.content = "{PopupContent}";
-          }
+                    var layerName;
+                    //attach click listeners to the checkboxes to turn layers on and off
+                    var checkboxes = document.getElementsByClassName("checkbox");
+                    for (i = 0; i < checkboxes.length; i++) {
+                        layerName = checkboxes[i].value;
+                        checkboxes[i].addEventListener("click", makeClickCallback(layerName));
+                    }
 
-      //hide and show the sidebar
-      var collapseDiv = document.getElementById("collapseButton");
-      var narrativeVisible = true;
-      collapseDiv.addEventListener('click', function() {
-        var sidePanel = document.getElementById("sidebar");
-        if (narrativeVisible == true){
-          sidePanel.style.width = "2px";
-          document.getElementById("collapseButton").style.left = "0.5%";
-          document.getElementById("collapse").textContent = "Show";
-          narrativeVisible = false;
-          return;
-        }
+                    //toggle layers on and off
+                    //note: the layers without data and basemaps are turned off when the box is clicked (their visibility
+                    //is set to false).  the layers with the data are not turned off; rather, they are assigned a new renderer
+                    //that makes them transparent, but their visibility is still true so that you can click on them and create the graphic
+                    function makeClickCallback(layerName) {
+                        function callback(){
+                            if (layerName == "parcels"){
+                                //if the parcels layer is transparent, assign it the default renderer that will make it visible again
+                                if (historicLayerIsVisible == false) {
+                                    for (var i = 0; i < listOfLayers.length; i++) {
+                                        layer = listOfLayers[i];
+                                        layer.renderer = renderer;
+                                    }
+                                    //remove any extra graphics
+                                    if (graphic) {
+                                        for (var i = 0; i < listOfLayers.length; i++) {
+                                            layer = listOfLayers[i];
+                                            layer.source.remove(graphic);
+                                        }
 
-        if (narrativeVisible == false) {
-          sidePanel.style.width = "26%";
-          document.getElementById("collapseButton").style.left = "26%";
-          document.getElementById("collapse").textContent = "Hide";
-          narrativeVisible = true;
-          return;
-        }
-      }); //end click
+                                    }
+                                    historicLayerIsVisible = true;
+                                    for (var i = 0; i < parcelsWithoutData.length; i++) {
+                                        parcelsWithoutData[i].visible = historicLayerIsVisible;
+                                    }
+                                    return;
+                                }
 
+                                if(historicLayerIsVisible == true) {
+                                    //assign the parcels with data a new renderer that makes them transparent
+                                    var renderer3 = new SimpleRenderer();
+                                    renderer3.symbol = invisibleSymbol;
+                                    for (var i = 0; i < listOfLayers.length; i++) {
+                                        layer = listOfLayers[i];
+                                        layer.renderer = renderer3;
+                                    }
+                                    historicLayerIsVisible = false;
+                                }
+                                for (var i = 0; i < parcelsWithoutData.length; i++) {
+                                    parcelsWithoutData[i].visible = historicLayerIsVisible;
+                                }
+                            }
 
-//show all records when the showAll button is clicked
-var showAll = document.getElementById("showAll");
-showAll.addEventListener('click', function() {
-  //reset the selector's value
-  selector.selectedIndex = 0;
-  document.getElementById("media_select").selectedIndex = 0;
-  //clear currently displayed recordsList[i]s
-  for (h = 0; h < listOfLayers.length; h++) {
-    layer = listOfLayers[h];
-    records = layer.source.toArray();
-    for (var i = records.length - 1; i > -1; i--) {
-      layer.source.remove(records[i]);
-    }
-  }
-  //add all recordsList[i]s
-  for (h = 0; h < listOfAllRecords.length; h++) {
-    allRecords = listOfAllRecords[h];
-    layer = listOfLayers[h];
-    for (var i = 0; i < allRecords.length; i++){
-      layer.source.add(allRecords[i]);
-    }
-  }
+                            if (layerName == "historic basemap") {
+                                for (var j = 0; j < allLayers.length; j++) {
+                                    if (allLayers[j].id == historicBasemap) {
+                                        allLayers[j].visible = !allLayers[j].visible;
+                                    }
+                                }
+                            }
 
-  for (var i = 0; i < parcelsWithoutData.length; i++) {
-    parcelsWithoutData[i].visible = historicLayerIsVisible;
-  }
-}); //end onclick
-
-//get all the field names that provide information on the architect
-var architectFields = [];
-for (var i = 0; i < listOfLayers.length; i++) {
-  layer = listOfLayers[i];
-  for (var j = 0; j < layer.fields.length; j++){
-    var fieldName = layer.fields[j].name;
-    var substring = "Arch";
-    if (fieldName.indexOf(substring) !== -1) {
-      architectFields.push(fieldName);
-    }
-  }
-}
-
-//populate the selector with all unique values of all the architect fields
-var selector = document.getElementById("field_select");
-var selectorList = [];
-for (h = 0; h < listOfLayers.length; h++) {
-  records = listOfLayers[h].source.toArray();
-  for (var i = 0, len = records.length; i < len; i++) {
-    for (var j =0; j < architectFields.length; j++) {
-      var architectField = architectFields[j];
-      if (architectField){
-        var architect = records[i].attributes[architectField];
-      }
-      if (isInArray(architect, selectorList) == false && architect && architect != " "){
-        selectorList.push(architect);
-      }
-    }
-  }
-}
-//sort and create the selector
-sortedList = selectorList.sort();
-for (var i = 0; i < sortedList.length; i++) {
-  var optionElement = document.createElement("option");
-  optionElement.innerHTML = sortedList[i];
-  selector.appendChild(optionElement);
-}
-
-selector.addEventListener('change', filterEquals);
-var mediaSelector = document.getElementById("media_select");
-mediaSelector.addEventListener('change', mediaFilter);
-
-//filter by the value of the architect field
-function filterEquals() {
-  //clear all layers
-  document.getElementById("media_select").selectedIndex = 0;
-  //remove all records from all layers
-  for (h = 0; h < listOfLayers.length; h++) {
-    layer1 = listOfLayerIds[h];
-    layer = map.findLayerById(layer1);
-    records = layer.source.toArray();
-    for (var i = records.length - 1; i>-1; i--) {
-      layer.source.remove(records[i]);
-    }
-  }
-  //turn off the parcels without data
-  for (var i = 0; i < parcelsWithoutData.length; i++) {
-    parcelsWithoutData[i].visible = false;
-  }
-  var architectSelection = selector.value;
-  //add all recordsList[i]s to the map that match the filter's value
-  for (h = 0; h < listOfLayers.length; h++) {
-    layer = listOfLayers[h];
-    records = listOfLayers[h].source.toArray();
-    for (var i = 0; i < recordsList.length; i++) {
-      for (var j = 0; j < architectFields.length; j++) {
-        var architectField = architectFields[j];
-        if (recordsList[i].attributes[architectField] == architectSelection) {
-          layer.source.add(recordsList[i]);
-        }
-      }
-    }
-  }
-} //end filter
-
-//display those parcels with photos, oral histories or both
-function mediaFilter() {
-  document.getElementById("field_select").selectedIndex = 0;
-  var firstImageField = imageFields[0];
-  var firstImageName = layer.fields[firstImageField].name;
-  var mediaType = mediaSelector.value;
-  for (var i = 0; i < parcelsWithoutData.length; i++) {
-    parcelsWithoutData[i].visible = false;
-  }
-  if (mediaType == "photo") {
-    for (h = 0; h < listOfLayers.length; h++) {
-      layer = listOfLayers[h];
-      records = layer.source.toArray();
-      for (var i = records.length - 1; i>-1; i--) {
-        layer.source.remove(records[i]);
-      }
-      for (var i = 0; i < recordsList.length; i++) {
-        if (recordsList[i].attributes[firstImageName].length > 1) {
-          layer.source.add(recordsList[i]);
-        }
-      }
-    }
-  }
-
-  if (mediaType == "oralhist") {
-    for (h = 0; h < listOfLayers.length; h++) {
-      layer = listOfLayers[h];
-      records = layer.source.toArray();
-      for (var i = records.length - 1; i>-1; i--) {
-        layer.source.remove(records[i]);
-      }
-      for (var i = 0; i < recordsList.length; i++) {
-        if (recordsList[i].attributes["OralHist1"].length > 1) {
-          layer.source.add(recordsList[i]);
-        }
-      }
-    }
-  }
-
-  if (mediaType == "both") {
-    for (h = 0; h < listOfLayers.length; h++) {
-      layer = listOfLayers[h];
-      records = layer.source.toArray();
-      for (var i = records.length - 1; i>-1; i--) {
-        layer.source.remove(records[i]);
-      }
-      for (var i = 0; i < recordsList.length; i++) {
-            if (recordsList[i].attributes[firstImageName].length > 1 && recordsList[i].attributes["OralHist1"].length > 1) {
-          layer.source.add(recordsList[i]);
-        }
-      }
-    }
-  }
-}//end mediaFilter
+                            if (layerName == "modern basemap") {
+                                for (var j = 0; j < allLayers.length; j++) {
+                                    if (allLayers[j].id == modernBasemap) {
+                                        allLayers[j].visible = !allLayers[j].visible;
+                                    }
+                                }
+                            }
+                        }
+                        return callback;
+                    }
 
 
-//create the popup by building a single new attribute field, PopupContent, which can then be set as the popup's content.
-//this function sets the popup content but it does not actually open the popup.  For each record the popup's content is in a single massive
-//attribute field with all HMTL, images, data, etc
-function createPopup(inputLayer) {
-  var records = inputLayer.source.toArray();
-  var recordsList = [];
-  for (var i = 0, len = records.length; i < len; i++) {
-    recordsList.push(records[i]);
-  }
-  //get the number of images for each parcel
-  var numberOfImages2;
-  for (var i = 0; i < recordsList.length; i++) {
-    var numberOfImages2 = 0;
-    for (var j = 0; j < imageFields.length; j++) {
-      var index2 = imageFields[j];
-      var imageField2 = layer.fields[index2].name;
-      if(recordsList[i].attributes[imageField2] && recordsList[i].attributes[imageField2].length > 1) {
-        numberOfImages2++;
-      }
-    }
-    recordsList[i].setAttribute("NoImg2", numberOfImages2);
-  }
+                    watchUtils.whenTrue(view, "stationary", function() {
+                        view.on("pointer-move", function(evt) {
+                            screenPoint = {
+                                x: evt.x,
+                                y: evt.y
+                            };
+                            //register when the user's mouse is over a feature
+                            view.hitTest(screenPoint)
+                            .then( function(response){
+                                //if the historic layer is transparent, create graphics when the user mouses over a feature
+                                if (historicLayerIsVisible == false) {
+                                    getGraphics(response);
+                                }
+                            });
+                        }); //end pointer move
+                    });
 
-  //build the popupContent field
-  for (var i = 0; i < recordsList.length; i++) {
-    var popupContent = "<div style = 'display: inline-block; width:100%; max-width:250px; overflow-y: scroll; max-height: 600; overflow-x: hidden;'>";
-    //if there are oral histories, add the link and oral history icon
-    if  (recordsList[i].attributes["OralHist1"] && recordsList[i].attributes["OralHist1"].length > 1) {
-      popupContent += "<div style = 'height:40px'>";
-      popupContent += "<div style = 'width:auto; display: inline-block; padding: 4px; '><img width = '20' src = 'http://www.clker.com/cliparts/6/g/n/Z/Y/V/head-outline-hi.png'></div>";
-      popupContent += "<div style = 'float:right; width:auto; margin-bottom: 6px; margin-top:6px; max-width:165px'><a href = '" + recordsList[i].attributes["OHLink1"] + "'> Oral History: " + recordsList[i].attributes["OralHist1"] + "</a></div>";
-      if  (recordsList[i].attributes["OralHist2"] && recordsList[i].attributes["OralHist2"].length > 1) {
-        popupContent += "<div style = 'float:right; width:auto; margin-bottom: 6px; margin-top:6px; max-width:165px'><a href = '" + recordsList[i].attributes["OHLink2"] + "'> Oral History 2: " + recordsList[i].attributes["OralHist2"] + "</a></div>";
-      }
-      if  (recordsList[i].attributes["OralHist3"] && recordsList[i].attributes["OralHist3"].length > 1) {
-        popupContent += "<div style = 'float:right; width:auto; margin-bottom: 6px; margin-top:6px; max-width:165px'><a href = '" + recordsList[i].attributes["OHLink3"] + "'> Oral History 3: " + recordsList[i].attributes["OralHist3"] + "</a></div>";
-      }
-      popupContent += "</div>";
-    }
+                    var recordsList = [];
+                    for (var i = 0; i < listOfLayers.length; i++) {
+                        layer = listOfLayers[i];
+                        var records = layer.source.toArray();
+                        for (var j = 0, len = records.length; j < len; j++) {
+                            recordsList.push(records[j]);
+                        }
+                    }
 
-    var totalNumberImages = recordsList[i].attributes["NoImg2"];
-    if (totalNumberImages == 0) {
-      popupContent += "There are no images for this parcel.";
-    }
-    //if there's only one image, just add it to the popup
-    if (totalNumberImages == 1) {
-      var singleImageIndex;
-      for (j = 0; j < imageFields.length; j++) {
-        var index2 = imageFields[j];
-        var imageField2 = layer.fields[index2].name;
-        if(recordsList[i].attributes[imageField2] && recordsList[i].attributes[imageField2].length > 1) {
-          singleImageIndex = imageFields[j];
-        }
-      }
-      //get the names of the single image and date fields
-      var firstImageField = layer.fields[singleImageIndex].name;
-      var firstDate = singleImageIndex + 1;
-      var firstDateField = layer.fields[firstDate].name;
-      var photoDate;
-      if (recordsList[i].attributes[firstDateField] < 2999) {
-        photoDate = recordsList[i].attributes[firstDateField];
-      }
-      if (recordsList[i].attributes[firstDateField] > 2999) {
-        photoDate = "";
-      }
-      popupContent += "<div><a href='" + recordsList[i].attributes[firstImageField] +"' data-lightbox='shImages' data-title='Date: " + photoDate +"'><img width='200' src='" + recordsList[i].attributes[firstImageField] + "' style='position:relative'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
-    }
+                    //put all the image field indexes in an array
+                    var imageFields = [];
+                    for (var i = 0; i < layer.fields.length; i++){
+                        var fieldName = layer.fields[i].name;
+                        var substring = "ImgSrc";
+                        if (fieldName.indexOf(substring) !== -1) {
+                            imageFields.push(i);
+                        }
+                    }
 
-    //if there's more than one image, put them in the format used by the Bootstrap Slideshow plugin
-    if (totalNumberImages > 1) {
-      popupContent += "<div class='container' id='carouselContainer' style = 'width: 100%; margin-right:12px'>";
-      popupContent += "<div id='myCarousel' class='carousel slide' data-ride='carousel' style = 'width: 200px; right:4%'>";
-      popupContent += "<div class='carousel-inner' role='listbox'>";
-      var firstImageIndex = 0;
-      //var len = imageFields.length;
-      for (j = 0; j < imageFields.length; j++) {
-        var index2 = imageFields[j];
-        var imageField2 = layer.fields[index2].name;
-        if(firstImageIndex == 0 && recordsList[i].attributes[imageField2] && recordsList[i].attributes[imageField2].length > 1) {
-          firstImageIndex = imageFields[j];
-        }
-      }
-      var firstImage = firstImageIndex;
-      var firstImageField = layer.fields[firstImage].name;
-      var firstDate = firstImageIndex + 1;
-      var firstDateField = layer.fields[firstDate].name;
-      var photoDate;
-      if (recordsList[i].attributes[firstDateField] < 2999) {
-        photoDate = recordsList[i].attributes[firstDateField];
-      }
-      if (recordsList[i].attributes[firstDateField] > 2999) {
-        photoDate = "";
-      }
-      popupContent += "<div class='item active'><a href='" + recordsList[i].attributes[firstImageField] + "'data-lightbox='shImages'data-title='Date: " + photoDate +"'><img width='200' src='" + recordsList[i].attributes[firstImageField] + "'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
-      //var len = imageFields.length;
-      for (k = firstImageIndex + 1; k < layer.fields.length; k++) {
-        if (isInArray(k, imageFields)) {
-          var imageField = k;
-          var field = layer.fields[imageField].name;
-          var image = recordsList[i].attributes[field];
-          if (image && image.length > 1) {
-            var dateFieldIndex = imageField + 1;
-            var dateField = layer.fields[dateFieldIndex].name;
-            var photoDate;
-            if (recordsList[i].attributes[dateField] < 2999) {
-              photoDate = recordsList[i].attributes[dateField];
-            }
-            if (recordsList[i].attributes[dateField] > 2999) {
-              photoDate = "";
-            }
-            popupContent += "<div class='item'><a href='" + image + "'data-lightbox='shImages' data-title='Date: " + photoDate +"'><img width='200' src='" + image + "'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
-          }
-        }
-      }
-popupContent += "</div>";
-popupContent += "<a class='left carousel-control' href='#myCarousel' role='button' data-slide='prev'>" +
-"<span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span>" +
-"<span class='sr-only'>Previous</span>" +
-"</a>" +
-"<a class='right carousel-control' href='#myCarousel' role='button' data-slide='next'>" +
-"<span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span>" +
-"<span class='sr-only'>Next</span>" +
-"</a>" +
-"</div>";
-}
-popupContent += "</div>";
+                    //set the popup's content to be the field PopupContent which is created
+                    //by the createPopup function
+                    for (var i = 0; i < listOfLayers.length; i++) {
+                        layer = listOfLayers[i];
+                        createPopup(layer);
+                        popupTemplate = new PopupTemplate();
+                        layer.popupTemplate = popupTemplate;
+                        popupTemplate.title = "{" + titleField + "}";
+                        popupTemplate.content = "{PopupContent}";
+                    }
 
-//get the fields from the spreadsheet that will be displayed in the popup, and the aliases used to display them
-//the aliases can be whatever you want; the fields need to exactly match the field names in the spreadseet,
-//which in turn need to follow ArcGIS field name formatting words (13 characters or less, first character must be a letter,
-//no spaces or special characters other than _ )
+                    //hide and show the sidebar
+                    var collapseDiv = document.getElementById("collapseButton");
+                    var narrativeVisible = true;
+                    collapseDiv.addEventListener('click', function() {
+                        var sidePanel = document.getElementById("sidebar");
+                        if (narrativeVisible == true){
+                            sidePanel.style.width = "2px";
+                            document.getElementById("collapseButton").style.left = "0.5%";
+                            document.getElementById("collapse").textContent = "Show";
+                            narrativeVisible = false;
+                            return;
+                        }
 
-var hasData = false;
-//check to see if there is any spreadsheet data
-for (var j = 0; j < spreadSheetFields.length; j++) {
-  if (recordsList[i].attributes[attribute] && recordsList[i].attributes[attribute].length > 1) {
-    hasData = true;
-  }
-}
-if (hasData == true) {
-  popupContent += "<br/>";
-  popupContent += "<div style = 'border-bottom: 1px solid white; font-size: 16px'> ADDITIONAL DATA </div>";
-}
-//print the yes/no fields
-if (recordsList[i].attributes["Acquired"] && recordsList[i].attributes["Acquired"] == "Y") {
-  popupContent += "<br/>";
-  popupContent += "<b>Acquired:</b> Yes";
-}
-if (recordsList[i].attributes["Acquired"] && recordsList[i].attributes["Acquired"] == "N") {
-  popupContent += "<br/>";
-  popupContent += "<b>Acquired:</b> No";
-}
-if (recordsList[i].attributes["HistCert"] && recordsList[i].attributes["HistCert"] == "Y") {
-  popupContent += "<br/>";
-  popupContent += "<b>Historic Certificate:</b> Yes";
-}
-if (recordsList[i].attributes["HistCert"] && recordsList[i].attributes["HistCert"] == "N") {
-  popupContent += "<br/>";
-  popupContent += "<b>Historic Certificate:</b> No";
-}
+                        if (narrativeVisible == false) {
+                            sidePanel.style.width = "26%";
+                            document.getElementById("collapseButton").style.left = "26%";
+                            document.getElementById("collapse").textContent = "Hide";
+                            narrativeVisible = true;
+                            return;
+                        }
+                    }); //end click
 
-//print the field aliases and values
-for (var j = 0; j < spreadSheetFields.length; j++) {
-  var attribute = spreadSheetFields[j];
-  if (recordsList[i].attributes[attribute] && recordsList[i].attributes[attribute].length > 1) {
-    popupContent += "<br/>";
-    popupContent += "<b>" + spreadSheetFieldsAliases[j] + ":</b> " + recordsList[i].attributes[attribute];
-  }
-}
 
-//print a description split across multiple fields
-var description1 = descriptionFields[0];
-if (recordsList[i].attributes[description1] && recordsList[i].attributes[description1].length > 1) {
-  popupContent += "<br/>";
-  popupContent += "<b>Description:</b> " + recordsList[i].attributes[description1];
-}
+                    //show all records when the showAll button is clicked
+                    var showAll = document.getElementById("showAll");
+                    showAll.addEventListener('click', function() {
+                        //reset the selector's value
+                        selector.selectedIndex = 0;
+                        document.getElementById("media_select").selectedIndex = 0;
+                        //clear currently displayed recordsList[i]s
+                        for (h = 0; h < listOfLayers.length; h++) {
+                            layer = listOfLayers[h];
+                            records = layer.source.toArray();
+                            for (var i = records.length - 1; i > -1; i--) {
+                                layer.source.remove(records[i]);
+                            }
+                        }
+                        //add all recordsList[i]s
+                        for (h = 0; h < listOfAllRecords.length; h++) {
+                            allRecords = listOfAllRecords[h];
+                            layer = listOfLayers[h];
+                            for (var i = 0; i < allRecords.length; i++){
+                                layer.source.add(allRecords[i]);
+                            }
+                        }
 
-for (var j = 1; j < descriptionFields.length; j++) {
-  var description = descriptionFields[j];
-  if (recordsList[i].attributes[description] && recordsList[i].attributes[description].length > 1) {
-    popupContent +=  recordsList[i].attributes[description];
-  }
+                        for (var i = 0; i < parcelsWithoutData.length; i++) {
+                            parcelsWithoutData[i].visible = historicLayerIsVisible;
+                        }
+                    }); //end onclick
 
-}
-//set the new field you just created with all popup content, to be the popup content
-recordsList[i].setAttribute("PopupContent", popupContent);
-} //end for
-}
+                    //get all the field names that provide information on the architect
+                    var architectFields = [];
+                    for (var i = 0; i < listOfLayers.length; i++) {
+                        layer = listOfLayers[i];
+                        for (var j = 0; j < layer.fields.length; j++){
+                            var fieldName = layer.fields[j].name;
+                            var substring = "Arch";
+                            if (fieldName.indexOf(substring) !== -1) {
+                                architectFields.push(fieldName);
+                            }
+                        }
+                    }
 
-}); //end view.then
-}); // end all
+                    //populate the selector with all unique values of all the architect fields
+                    var selector = document.getElementById("field_select");
+                    var selectorList = [];
+                    for (h = 0; h < listOfLayers.length; h++) {
+                        records = listOfLayers[h].source.toArray();
+                        for (var i = 0, len = records.length; i < len; i++) {
+                            for (var j =0; j < architectFields.length; j++) {
+                                var architectField = architectFields[j];
+                                if (architectField){
+                                    var architect = records[i].attributes[architectField];
+                                }
+                                if (isInArray(architect, selectorList) == false && architect && architect != " "){
+                                    selectorList.push(architect);
+                                }
+                            }
+                        }
+                    }
+                    //sort and create the selector
+                    sortedList = selectorList.sort();
+                    for (var i = 0; i < sortedList.length; i++) {
+                        var optionElement = document.createElement("option");
+                        optionElement.innerHTML = sortedList[i];
+                        selector.appendChild(optionElement);
+                    }
 
-</script>
-</head>
-<body class="claro">
-  <div id = "pageTitle"> Preserving Society Hill </div>
-  <div id = "biggestDiv">
-    <div id="viewDiv"></div>
-    <div id = "sidebar">
-      <a id = "collapseButton" href = "#">
-        <div id = "collapse">Hide
-        </div>
-      </a>
-      <div id = "innerSidebar">
-        <div id = "introduction">
-          <div id = "introTitle" class = "sidebarTitle">
-            Introduction
-          </div>
-          <div id = "introText" class = "sidebarText">
-            This website displays historic photographs, oral histories and redevelopment information for properties in Philadelphia's Society Hill neighborhood.  Click on a parcel to view the associated media, or filter by reuse type or type of media.
-          </div>
-        </div>
-        <div id = "layers">
-          <div id = "layerTitle" class = "sidebarTitle">
-            Layers
-          </div>
-          <div id = "layerChecklist" class = "sidebarText">
-            <form action = ''>
-              <div> <input type="checkbox" class="checkbox" value="parcels" checked> Historic parcels </div>
-              <div><input type="checkbox" class = "checkbox" value="historic basemap" checked> Historic basemap </div>
-              <div><input type="checkbox" class = "checkbox" value="modern basemap" checked> Modern basemap </div>
-            </form>
-          </div>
-        </div>
-        <div id = "buttonDiv">
-          <input class="w3-button w3-large w3-round" style = "background-color: #d8e6cc" type="button"  id="showAll" value="Show all"/>
-          <select id="field_select" style = "background-color: #d8e6cc; height:30px; width:58%" class="w3-button w3-large w3-round selector"><option value="init">(filter by architect)</option></select>
-          <select id="media_select" style = "background-color: #d8e6cc; height:30px; width:147px" class="w3-button w3-large w3-round selector">
-            <option value="init">(filter by media)</option>
-            <option value = "photo">Photos</option>
-            <option value = "oralhist">Oral Histories</option>
-            <option value = "both">Photos and Oral Histories</option>
-          </select>
-        </br>
-        <a href = "https:/pennds.org/societyhill"> View all oral histories </a>
-      </div>
-    </div>
-  </div>
-  <div id = "geocoder" style = "position:relative; z-index:1000"></div>
-  <script src="lightbox/js/lightbox-plus-jquery.js"></script>
-</body>
-<script>
-</script>
-</html>
+                    selector.addEventListener('change', filterEquals);
+                    var mediaSelector = document.getElementById("media_select");
+                    mediaSelector.addEventListener('change', mediaFilter);
+
+                    //filter by the value of the architect field
+                    function filterEquals() {
+                        //clear all layers
+                        document.getElementById("media_select").selectedIndex = 0;
+                        //remove all records from all layers
+                        for (h = 0; h < listOfLayers.length; h++) {
+                            layer1 = listOfLayerIds[h];
+                            layer = map.findLayerById(layer1);
+                            records = layer.source.toArray();
+                            for (var i = records.length - 1; i>-1; i--) {
+                                layer.source.remove(records[i]);
+                            }
+                        }
+                        //turn off the parcels without data
+                        for (var i = 0; i < parcelsWithoutData.length; i++) {
+                            parcelsWithoutData[i].visible = false;
+                        }
+                        var architectSelection = selector.value;
+                        //add all recordsList[i]s to the map that match the filter's value
+                        for (h = 0; h < listOfLayers.length; h++) {
+                            layer = listOfLayers[h];
+                            records = listOfLayers[h].source.toArray();
+                            for (var i = 0; i < recordsList.length; i++) {
+                                for (var j = 0; j < architectFields.length; j++) {
+                                    var architectField = architectFields[j];
+                                    if (recordsList[i].attributes[architectField] == architectSelection) {
+                                        layer.source.add(recordsList[i]);
+                                    }
+                                }
+                            }
+                        }
+                    } //end filter
+
+                    //display those parcels with photos, oral histories or both
+                    function mediaFilter() {
+                        document.getElementById("field_select").selectedIndex = 0;
+                        var firstImageField = imageFields[0];
+                        var firstImageName = layer.fields[firstImageField].name;
+                        var mediaType = mediaSelector.value;
+                        for (var i = 0; i < parcelsWithoutData.length; i++) {
+                            parcelsWithoutData[i].visible = false;
+                        }
+                        if (mediaType == "photo") {
+                            for (h = 0; h < listOfLayers.length; h++) {
+                                layer = listOfLayers[h];
+                                records = layer.source.toArray();
+                                for (var i = records.length - 1; i>-1; i--) {
+                                    layer.source.remove(records[i]);
+                                }
+                                for (var i = 0; i < recordsList.length; i++) {
+                                    if (recordsList[i].attributes[firstImageName].length > 1) {
+                                        layer.source.add(recordsList[i]);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (mediaType == "oralhist") {
+                            for (h = 0; h < listOfLayers.length; h++) {
+                                layer = listOfLayers[h];
+                                records = layer.source.toArray();
+                                for (var i = records.length - 1; i>-1; i--) {
+                                    layer.source.remove(records[i]);
+                                }
+                                for (var i = 0; i < recordsList.length; i++) {
+                                    if (recordsList[i].attributes["OralHist1"].length > 1) {
+                                        layer.source.add(recordsList[i]);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (mediaType == "both") {
+                            for (h = 0; h < listOfLayers.length; h++) {
+                                layer = listOfLayers[h];
+                                records = layer.source.toArray();
+                                for (var i = records.length - 1; i>-1; i--) {
+                                    layer.source.remove(records[i]);
+                                }
+                                for (var i = 0; i < recordsList.length; i++) {
+                                    if (recordsList[i].attributes[firstImageName].length > 1 && recordsList[i].attributes["OralHist1"].length > 1) {
+                                        layer.source.add(recordsList[i]);
+                                    }
+                                }
+                            }
+                        }
+                    }//end mediaFilter
+
+
+                    //create the popup by building a single new attribute field, PopupContent, which can then be set as the popup's content.
+                    //this function sets the popup content but it does not actually open the popup.  For each record the popup's content is in a single massive
+                    //attribute field with all HMTL, images, data, etc
+                    function createPopup(inputLayer) {
+                        var records = inputLayer.source.toArray();
+                        var recordsList = [];
+                        for (var i = 0, len = records.length; i < len; i++) {
+                            recordsList.push(records[i]);
+                        }
+                        //get the number of images for each parcel
+                        var numberOfImages2;
+                        for (var i = 0; i < recordsList.length; i++) {
+                            var numberOfImages2 = 0;
+                            for (var j = 0; j < imageFields.length; j++) {
+                                var index2 = imageFields[j];
+                                var imageField2 = layer.fields[index2].name;
+                                if(recordsList[i].attributes[imageField2] && recordsList[i].attributes[imageField2].length > 1) {
+                                    numberOfImages2++;
+                                }
+                            }
+                            recordsList[i].setAttribute("NoImg2", numberOfImages2);
+                        }
+
+                        //build the popupContent field
+                        for (var i = 0; i < recordsList.length; i++) {
+                            var popupContent = "<div>";
+                            //if there are oral histories, add the link and oral history icon
+                            if  (recordsList[i].attributes["OralHist1"] && recordsList[i].attributes["OralHist1"].length > 1) {
+                                popupContent += "<div style = 'height:40px'>";
+                                popupContent += "<div style = 'width:auto; display: inline-block; padding: 4px; '><img width = '20' src = 'http://www.clker.com/cliparts/6/g/n/Z/Y/V/head-outline-hi.png'></div>";
+                                popupContent += "<div style = 'float:right; width:auto; margin-bottom: 6px; margin-top:6px; max-width:165px'><a href = '" + recordsList[i].attributes["OHLink1"] + "'> Oral History: " + recordsList[i].attributes["OralHist1"] + "</a></div>";
+                                if  (recordsList[i].attributes["OralHist2"] && recordsList[i].attributes["OralHist2"].length > 1) {
+                                    popupContent += "<div style = 'float:right; width:auto; margin-bottom: 6px; margin-top:6px; max-width:165px'><a href = '" + recordsList[i].attributes["OHLink2"] + "'> Oral History 2: " + recordsList[i].attributes["OralHist2"] + "</a></div>";
+                                }
+                                if  (recordsList[i].attributes["OralHist3"] && recordsList[i].attributes["OralHist3"].length > 1) {
+                                    popupContent += "<div style = 'float:right; width:auto; margin-bottom: 6px; margin-top:6px; max-width:165px'><a href = '" + recordsList[i].attributes["OHLink3"] + "'> Oral History 3: " + recordsList[i].attributes["OralHist3"] + "</a></div>";
+                                }
+                                popupContent += "</div>";
+                            }
+
+                            var totalNumberImages = recordsList[i].attributes["NoImg2"];
+                            if (totalNumberImages == 0) {
+                                popupContent += "There are no images for this parcel.";
+                            }
+                            //if there's only one image, just add it to the popup
+                            if (totalNumberImages == 1) {
+                                var singleImageIndex;
+                                for (j = 0; j < imageFields.length; j++) {
+                                    var index2 = imageFields[j];
+                                    var imageField2 = layer.fields[index2].name;
+                                    if(recordsList[i].attributes[imageField2] && recordsList[i].attributes[imageField2].length > 1) {
+                                        singleImageIndex = imageFields[j];
+                                    }
+                                }
+                                //get the names of the single image and date fields
+                                var firstImageField = layer.fields[singleImageIndex].name;
+                                var firstDate = singleImageIndex + 1;
+                                var firstDateField = layer.fields[firstDate].name;
+                                var photoDate;
+                                if (recordsList[i].attributes[firstDateField] < 2999) {
+                                    photoDate = recordsList[i].attributes[firstDateField];
+                                }
+                                if (recordsList[i].attributes[firstDateField] > 2999) {
+                                    photoDate = "";
+                                }
+                                popupContent += "<div><a href='" + recordsList[i].attributes[firstImageField] +"' data-lightbox='shImages' data-title='Date: " + photoDate +"'><img width='200' src='" + recordsList[i].attributes[firstImageField] + "' style='position:relative'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
+                            }
+
+                            //if there's more than one image, put them in the format used by the Bootstrap Slideshow plugin
+                            if (totalNumberImages > 1) {
+                                popupContent += "<div class='container' id='carouselContainer' style = 'width: 100%; margin-right:12px'>";
+                                popupContent += "<div id='myCarousel' class='carousel slide' data-ride='carousel' style = 'width: 200px; right:4%'>";
+                                popupContent += "<div class='carousel-inner' role='listbox'>";
+                                var firstImageIndex = 0;
+                                //var len = imageFields.length;
+                                for (j = 0; j < imageFields.length; j++) {
+                                    var index2 = imageFields[j];
+                                    var imageField2 = layer.fields[index2].name;
+                                    if(firstImageIndex == 0 && recordsList[i].attributes[imageField2] && recordsList[i].attributes[imageField2].length > 1) {
+                                        firstImageIndex = imageFields[j];
+                                    }
+                                }
+                                var firstImage = firstImageIndex;
+                                var firstImageField = layer.fields[firstImage].name;
+                                var firstDate = firstImageIndex + 1;
+                                var firstDateField = layer.fields[firstDate].name;
+                                var photoDate;
+                                if (recordsList[i].attributes[firstDateField] < 2999) {
+                                    photoDate = recordsList[i].attributes[firstDateField];
+                                }
+                                if (recordsList[i].attributes[firstDateField] > 2999) {
+                                    photoDate = "";
+                                }
+                                popupContent += "<div class='item active'><a href='" + recordsList[i].attributes[firstImageField] + "'data-lightbox='shImages'data-title='Date: " + photoDate +"'><img width='200' src='" + recordsList[i].attributes[firstImageField] + "'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
+                                //var len = imageFields.length;
+                                for (k = firstImageIndex + 1; k < layer.fields.length; k++) {
+                                    if (isInArray(k, imageFields)) {
+                                        var imageField = k;
+                                        var field = layer.fields[imageField].name;
+                                        var image = recordsList[i].attributes[field];
+                                        if (image && image.length > 1) {
+                                            var dateFieldIndex = imageField + 1;
+                                            var dateField = layer.fields[dateFieldIndex].name;
+                                            var photoDate;
+                                            if (recordsList[i].attributes[dateField] < 2999) {
+                                                photoDate = recordsList[i].attributes[dateField];
+                                            }
+                                            if (recordsList[i].attributes[dateField] > 2999) {
+                                                photoDate = "";
+                                            }
+                                            popupContent += "<div class='item'><a href='" + image + "'data-lightbox='shImages' data-title='Date: " + photoDate +"'><img width='200' src='" + image + "'></a><span style = 'position:relative; left:50%; font-size:16px'><b>" + photoDate + "</b></span></div>";
+                                        }
+                                    }
+                                }
+                                popupContent += "</div>";
+                                popupContent += "<a class='left carousel-control' href='#myCarousel' role='button' data-slide='prev'>" +
+                                "<span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span>" +
+                                "<span class='sr-only'>Previous</span>" +
+                                "</a>" +
+                                "<a class='right carousel-control' href='#myCarousel' role='button' data-slide='next'>" +
+                                "<span class='glyphicon glyphicon-chevron-right' aria-hidden='true'></span>" +
+                                "<span class='sr-only'>Next</span>" +
+                                "</a>" +
+                                "</div>";
+                            }
+                            popupContent += "</div>";
+
+                            //get the fields from the spreadsheet that will be displayed in the popup, and the aliases used to display them
+                            //the aliases can be whatever you want; the fields need to exactly match the field names in the spreadseet,
+                            //which in turn need to follow ArcGIS field name formatting words (13 characters or less, first character must be a letter,
+                            //no spaces or special characters other than _ )
+
+                            var hasData = false;
+                            //check to see if there is any spreadsheet data
+                            for (var j = 0; j < spreadSheetFields.length; j++) {
+                                if (recordsList[i].attributes[attribute] && recordsList[i].attributes[attribute].length > 1) {
+                                    hasData = true;
+                                }
+                            }
+                            if (hasData == true) {
+                                popupContent += "<br/>";
+                                popupContent += "<div style = 'border-bottom: 1px solid white; font-size: 16px'> ADDITIONAL DATA </div>";
+                            }
+                            //print the yes/no fields
+                            if (recordsList[i].attributes["Acquired"] && recordsList[i].attributes["Acquired"] == "Y") {
+                                popupContent += "<br/>";
+                                popupContent += "<b>Acquired:</b> Yes";
+                            }
+                            if (recordsList[i].attributes["Acquired"] && recordsList[i].attributes["Acquired"] == "N") {
+                                popupContent += "<br/>";
+                                popupContent += "<b>Acquired:</b> No";
+                            }
+                            if (recordsList[i].attributes["HistCert"] && recordsList[i].attributes["HistCert"] == "Y") {
+                                popupContent += "<br/>";
+                                popupContent += "<b>Historic Certificate:</b> Yes";
+                            }
+                            if (recordsList[i].attributes["HistCert"] && recordsList[i].attributes["HistCert"] == "N") {
+                                popupContent += "<br/>";
+                                popupContent += "<b>Historic Certificate:</b> No";
+                            }
+
+                            //print the field aliases and values
+                            for (var j = 0; j < spreadSheetFields.length; j++) {
+                                var attribute = spreadSheetFields[j];
+                                if (recordsList[i].attributes[attribute] && recordsList[i].attributes[attribute].length > 1) {
+                                    popupContent += "<br/>";
+                                    popupContent += "<b>" + spreadSheetFieldsAliases[j] + ":</b> " + recordsList[i].attributes[attribute];
+                                }
+                            }
+
+                            //print a description split across multiple fields
+                            var description1 = descriptionFields[0];
+                            if (recordsList[i].attributes[description1] && recordsList[i].attributes[description1].length > 1) {
+                                popupContent += "<br/>";
+                                popupContent += "<b>Description:</b> " + recordsList[i].attributes[description1];
+                            }
+
+                            for (var j = 1; j < descriptionFields.length; j++) {
+                                var description = descriptionFields[j];
+                                if (recordsList[i].attributes[description] && recordsList[i].attributes[description].length > 1) {
+                                    popupContent +=  recordsList[i].attributes[description];
+                                }
+
+                            }
+                            //set the new field you just created with all popup content, to be the popup content
+                            recordsList[i].setAttribute("PopupContent", popupContent);
+                        } //end for
+                    }
+
+                }); //end view.then
+            }); // end all
+
+            </script>
+        </head>
+        <body class="claro">
+            <div id = "pageTitle"> Preserving Society Hill </div>
+            <div id = "biggestDiv">
+                <div id="viewDiv"></div>
+                <div id = "sidebar">
+                    <a id = "collapseButton" href = "#">
+                        <div id = "collapse">Hide
+                        </div>
+                    </a>
+                    <div id = "innerSidebar">
+                        <div id = "introduction">
+                            <div id = "introTitle" class = "sidebarTitle">
+                                Introduction
+                            </div>
+                            <div id = "introText" class = "sidebarText">
+                                This website displays historic photographs, oral histories and redevelopment information for properties in Philadelphia's Society Hill neighborhood.  Click on a parcel to view the associated media, or filter by reuse type or type of media.
+                            </div>
+                        </div>
+                        <div id = "layers">
+                            <div id = "layerTitle" class = "sidebarTitle">
+                                Layers
+                            </div>
+                            <div id = "layerChecklist" class = "sidebarText">
+                                <form action = ''>
+                                    <div> <input type="checkbox" class="checkbox" value="parcels" checked> Historic parcels </div>
+                                    <div><input type="checkbox" class = "checkbox" value="historic basemap" checked> Historic basemap </div>
+                                    <div><input type="checkbox" class = "checkbox" value="modern basemap" checked> Modern basemap </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div id = "buttonDiv">
+                            <div class = "sidebarTitle">
+                                Filters
+                            </div>
+                            <ul class="filterMenu">
+                                <li>
+                                    <select id="field_select" style = "background-color: #d8e6cc; height:30px; width:58%" class="w3-button w3-large w3-round selector"><option value="init">(filter by architect)</option></select>
+                                </li>
+                                <li>
+                                    <select id="media_select" style = "background-color: #d8e6cc; height:30px; width:147px" class="w3-button w3-large w3-round selector">
+                                        <option value="init">(filter by media)</option>
+                                        <option value = "photo">Photos</option>
+                                        <option value = "oralhist">Oral Histories</option>
+                                        <option value = "both">Photos and Oral Histories</option>
+                                    </select>
+                                </li>
+                                <li>
+                                    <input class="w3-button w3-large w3-round" style = "background-color: #d8e6cc" type="button"  id="showAll" value="Show all"/>
+                                </li>
+                            </ul>
+                        </br>
+                        <a href = "https:/pennds.org/societyhill"> View all oral histories </a>
+                    </div>
+                </div>
+            </div>
+            <div id = "geocoder" style = "position:relative; z-index:1000"></div>
+            <script src="lightbox/js/lightbox-plus-jquery.js"></script>
+        </body>
+        <script>
+        </script>
+        </html>
